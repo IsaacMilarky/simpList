@@ -16,6 +16,7 @@ class ListItem
 
 		//Getters and Setters
 		std::time_t getCreationDate();
+		std::time_t getDeadLine();
 		std::string getTodoName();
 		void print();
 	protected:

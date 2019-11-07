@@ -31,6 +31,13 @@ std::time_t ListItem::getCreationDate()
 	return dateCreated;
 }
 
+std::time_t getDeadLine()
+{
+	if(deadLine)
+		return *deadLine;
+	return NULL;
+}
+
 std::string ListItem::getTodoName()
 {
 	return itemName;
@@ -39,5 +46,16 @@ std::string ListItem::getTodoName()
 void ListItem::print()
 {
 	//TODO: just make it print out members that exist.
+	/*
+		std::time_t dateCreated;
+		std::time_t * deadLine; //ssh its fine
+		std::string itemName;
+	*/
+
+	std::cout << "toDo: " << itemName << "\n";
+	std::cout << "Item Created on: " << std::localtime(&dateCreated) << "\n";
+	if(deadLine)
+		std::cout << "Item should be completed on: " << std::localtime(&dateCreated) << "\n";
 }
+
 
