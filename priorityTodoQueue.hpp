@@ -22,7 +22,16 @@ class priorityQueueTodo
 		//arg needs to be dynamic
 		bool addTodoItem(ListItem*,float);
 		void printTodo();
+		void prioritizeByDeadLine();
+		void prioritizeByDateCreated();
 
 	private:
+		void sort();
+
+		int size;
 		Node *head,*rear;
+		
 };
+
+
+void switchNodes(Node*,Node*);
