@@ -28,7 +28,7 @@ priorityQueueTodo::~priorityQueueTodo()
 
 bool priorityQueueTodo::addTodoItem(ListItem * listItemPtr,float priority)
 {
-	Node toAdd;
+	Node * toAdd;
 	toAdd = new Node;
 	if(!toAdd)
 	{
@@ -138,9 +138,11 @@ void priorityQueueTodo::sort()
 	{
 		for(Node * iter = head; iter; iter = iter->next)
 		{
+			sorted = true;
 			if(iter->priority < iter->next->priority)
 			{
 				switchNodes(iter,iter->next);
+				sorted = false;
 			}
 		}
 
