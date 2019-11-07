@@ -31,7 +31,7 @@ std::time_t ListItem::getCreationDate()
 	return dateCreated;
 }
 
-std::time_t getDeadLine()
+std::time_t ListItem::getDeadLine()
 {
 	if(deadLine)
 		return *deadLine;
