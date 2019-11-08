@@ -19,6 +19,8 @@ class ListItem
 		std::time_t getDeadLine();
 		std::string getTodoName();
 		void print();
+		void setDeadLine(std::time_t);
+		void setTodoName(std::string);
 	protected:
 		std::time_t dateCreated;
 		std::time_t * deadLine; //ssh its fine
