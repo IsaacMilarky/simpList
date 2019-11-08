@@ -22,6 +22,7 @@ priorityQueueTodo::~priorityQueueTodo()
 	{
 		Node* clobberinTime = iter;
 		iter = iter->next;
+		delete clobberinTime->key;
 		delete clobberinTime;
 	}	
 }
@@ -115,16 +116,23 @@ void priorityQueueTodo::prioritizeByDateCreated()
 {
 	Node * iter;
 	int priorityOffset = 0;
+	std::time_t oldestUnixTime = NULL;
+
 	for(iter = head; iter; iter = iter->next)
 	{
-		if(!iter->key->getDeadLine() == NULL)
-			iter->priority = 0;
-		else
+		if(oldestUnixTime == NULL || iter->key->getCreationDate() < oldestUnixTime)
 		{
+			oldestUnixTime = iter->key->getCreationDate();
 			iter->priority = ++priorityOffset;
 		}
+		else
+		{
+			iter->priority = priorityOffset;
+		}
+		
 		
 	}
+	sort();
 }
 
 //Private
@@ -136,15 +144,19 @@ void priorityQueueTodo::sort()
 
 	while(!sorted)
 	{
+		int count = 0;
+
 		for(Node * iter = head; iter; iter = iter->next)
 		{
-			sorted = true;
+
 			if(iter->priority < iter->next->priority)
 			{
 				switchNodes(iter,iter->next);
-				sorted = false;
+				count++;
 			}
 		}
+
+		sorted = count == 0;
 
 	}
 }

@@ -53,9 +53,23 @@ void ListItem::print()
 	*/
 
 	std::cout << "toDo: " << itemName << "\n";
-	std::cout << "Item Created on: " << std::localtime(&dateCreated) << "\n";
+	std::cout << "Item Created on: " << std::ctime(&dateCreated) << "\n";
 	if(deadLine)
-		std::cout << "Item should be completed on: " << std::localtime(&dateCreated) << "\n";
+		std::cout << "Item should be completed on: " << std::ctime(deadLine) << "\n";
 }
 
+void ListItem::setDeadLine(std::time_t future)
+{
+	deadLine = new std::time_t;
+	if(!deadLine)
+		return;
+	*deadLine = future;
+	return;
+}
+
+void ListItem::setTodoName(std::string name)
+{
+	itemName = name;
+	return;
+}
 
