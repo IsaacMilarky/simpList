@@ -4,7 +4,16 @@
 #include <ctime>
 #include "priorityTodoQueue.hpp"
 
-int main()
+/*
+	Note:
+	Ok, so basically i'm gonna make this cli and
+	then just add more and more features from there.
+	Hopefully, this project won't be cli forever.
+*/
+
+const static std::time_t NOW = std::time(0);
+
+int main(int argc, char* argsv[])
 {
 	auto pqtd = priorityQueueTodo();
 
@@ -13,7 +22,10 @@ int main()
 		ListItem * ptr = new ListItem("Item " + std::to_string(iter));
 		std::time_t now = std::time(0);
 
-		ptr->setDeadLine(now + 1000000);
+		std::tm * endDate = std::localtime(&now);
+		endDate->tm_mon = endDate->tm_mon + iter;
+
+		ptr->setDeadLine(*endDate);
 		pqtd.addTodoItem(ptr,10.0/((float)iter));
 	}
 

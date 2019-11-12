@@ -58,7 +58,7 @@ bool priorityQueueTodo::addTodoItem(ListItem * listItemPtr,float priority)
 	//Equals iter->next if it exists otherwise its null;
 	Node* temp = (iter->next) ? iter->next : NULL;
 
-	size++;
+	++size;
 
 	if(priority < head->priority)
 	{
@@ -92,15 +92,16 @@ void priorityQueueTodo::prioritizeByDeadLine()
 {
 	Node * iter;
 	int priorityOffset = 0;
-	std::time_t oldestUnixTime = NULL;
+	std::time_t oldestUnixTime = -1;
 
 	for(iter = head; iter; iter = iter->next)
 	{
 		if(!iter->key->getDeadLine() == NULL)
 			iter->priority = 0;
-		else if(oldestUnixTime == NULL || iter->key->getDeadLine() < oldestUnixTime)
+		//std::mktime converts time to seconds since 1/1/1970
+		else if(oldestUnixTime == -1 || std::mktime(iter->key->getDeadLine()) < oldestUnixTime)
 		{
-			oldestUnixTime = iter->key->getDeadLine();
+			oldestUnixTime = std::mktime(iter->key->getDeadLine());
 			iter->priority = ++priorityOffset;	 
 		}
 		else
@@ -116,13 +117,13 @@ void priorityQueueTodo::prioritizeByDateCreated()
 {
 	Node * iter;
 	int priorityOffset = 0;
-	std::time_t oldestUnixTime = NULL;
+	std::time_t oldestUnixTime = -1;
 
 	for(iter = head; iter; iter = iter->next)
 	{
-		if(oldestUnixTime == NULL || iter->key->getCreationDate() < oldestUnixTime)
+		if(oldestUnixTime == -1 || std::mktime(iter->key->getCreationDate()) < oldestUnixTime)
 		{
-			oldestUnixTime = iter->key->getCreationDate();
+			oldestUnixTime = std::mktime(iter->key->getCreationDate());
 			iter->priority = ++priorityOffset;
 		}
 		else
