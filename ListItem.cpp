@@ -1,24 +1,53 @@
 #include <iostream>
+#include <iomanip>
 #include "ListItem.hpp"
 
 ListItem::ListItem(std::string name)
 {
-	dateCreated = time(NULL);
+	std::time_t now = time(NULL);
+	dateCreated = std::localtime(&now);
 	deadLine = NULL;
 	itemName = name;	
 }
 
-ListItem::ListItem(std::string name, std::time_t hardLineDeadLine)
+ListItem::ListItem(std::string name, std::tm hardLineDeadLine)
 {
-	dateCreated = time(NULL);
-	deadLine = new std::time_t;
+	/*
+		Arguments are not pointers because I don't
+		want to deal with the possibility of memory
+		handles to ListItem being null.
+	*/
+	std::time_t now = std::time(NULL);
+	dateCreated = std::localtime(&now);
+	deadLine = new std::tm;
 	if(!deadLine) //Dont touch
-		std::cout << "Error: everything is on fire: line 16 toDoList.cpp\n";
+		std::cout << "Error: everything is on fire: line 24 toDoList.cpp\n";
 
 	*deadLine = hardLineDeadLine;
 
 	itemName = name;
 }
+
+ListItem::ListItem(std::string name, std::time_t hardLineDeadLine)
+{
+	/*
+		Arguments are not pointers because I don't
+		want to deal with the possibility of memory
+		handles to ListItem being null.
+	*/
+
+	std::time_t now = std::time(NULL);
+	dateCreated = std::localtime(&now);
+	deadLine = new std::tm;
+	if(!deadLine)
+		std::cout << "Error: seek help on line 43 toDoList.cpp\n";
+
+	//localtime takes pointer so we give it parameter addr.
+	deadLine = std::localtime(&hardLineDeadLine);
+
+	itemName = name;
+}
+
 
 ListItem::~ListItem()
 {
@@ -26,16 +55,14 @@ ListItem::~ListItem()
 		delete deadLine;
 }
 
-std::time_t ListItem::getCreationDate()
+std::tm* ListItem::getCreationDate()
 {
 	return dateCreated;
 }
 
-std::time_t ListItem::getDeadLine()
+std::tm* ListItem::getDeadLine()
 {
-	if(deadLine)
-		return *deadLine;
-	return NULL;
+	return deadLine ? deadLine : NULL;
 }
 
 std::string ListItem::getTodoName()
@@ -53,14 +80,15 @@ void ListItem::print()
 	*/
 
 	std::cout << "toDo: " << itemName << "\n";
-	std::cout << "Item Created on: " << std::ctime(&dateCreated) << "\n";
+	std::cout << "Item Created on: " << std::put_time(dateCreated,"%c %Z") << "\n";
+	
 	if(deadLine)
-		std::cout << "Item should be completed on: " << std::ctime(deadLine) << "\n";
+		std::cout << "Item should be completed on: " << std::put_time(deadLine,"%c %Z") << "\n";
 }
 
-void ListItem::setDeadLine(std::time_t future)
+void ListItem::setDeadLine(std::tm future)
 {
-	deadLine = new std::time_t;
+	deadLine = new std::tm;
 	if(!deadLine)
 		return;
 	*deadLine = future;
