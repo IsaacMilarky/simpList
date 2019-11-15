@@ -101,3 +101,24 @@ void ListItem::setTodoName(std::string name)
 	return;
 }
 
+std::istream& operator>>(std::istream& is, ListItem& en)
+{
+	std::time_t tempVal;
+
+	tempVal = std::mktime(en.dateCreated);
+	is >> tempVal;
+	tempVal = std::mktime(en.deadLine);
+	is >> tempVal;
+	is >> en.itemName;
+
+	return is;
+}
+
+std::ostream& operator<<(std::ostream& os, const ListItem& en)
+{
+	os << en.dateCreated << ", ";
+	os << en.deadLine << ", ";
+	os << en.itemName << ", ";
+
+	return os;
+}

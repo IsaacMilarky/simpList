@@ -136,6 +136,49 @@ void priorityQueueTodo::prioritizeByDateCreated()
 	sort();
 }
 
+bool priorityQueueTodo::writeToFile()
+{
+	std::ofstream out("listItemLog.json");
+	if(!out) //File not found err.
+		return false;
+
+	Node * iter;
+
+	for(iter = head; iter; iter = iter->next)
+	{
+		//Format for file output.
+		out << "-------------------------------------\n";
+		out << *(iter->key) << "\n";//ValueOne, ValueTwo, ValueThree ///etc
+		out << "-------------------------------------\n";
+	}
+
+	out.close();
+	return true;
+}
+
+bool priorityQueueTodo::loadFromFile(std::string fileName)
+{
+	std::ifstream in(fileName.c_str());
+	if(!in)
+		return false;
+	
+	ListItem * toInsert = new ListItem("");
+	if(!toInsert)
+		return false;
+	
+	bool success = true;
+
+	do
+	{
+		in >> *toInsert;
+		success = addTodoItem(toInsert,1);
+	} while (toInsert && !(in.eof()));
+
+	prioritizeByDateCreated();
+	return success;
+
+}
+
 //Private
 //TODO: this is bubble sort but should be something better.
 void priorityQueueTodo::sort()

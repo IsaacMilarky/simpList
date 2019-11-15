@@ -1,6 +1,9 @@
+#pragma once
 #include <iostream>
 #include <string>
+#include <fstream>
 #include "ListItem.hpp"
+
 
 /*	
  *	Created by: Isaac Milarsky
@@ -32,6 +35,9 @@ class priorityQueueTodo
 		void printTodo();
 		void prioritizeByDeadLine();
 		void prioritizeByDateCreated();
+
+		bool writeToFile();
+		bool loadFromFile(std::string);
 
 	private:
 		void sort();

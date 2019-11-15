@@ -17,6 +17,8 @@ int main(int argc, char* argsv[])
 {
 	auto pqtd = priorityQueueTodo();
 
+	pqtd.loadFromFile("listItemLog.json");
+	/*
 	for(int iter = 0; iter < 20; iter++)
 	{
 		ListItem * ptr = new ListItem("Item " + std::to_string(iter));
@@ -28,8 +30,8 @@ int main(int argc, char* argsv[])
 		ptr->setDeadLine(*endDate);
 		pqtd.addTodoItem(ptr,10.0/((float)iter));
 	}
-
+	*/
 	pqtd.printTodo();
 
-	return 0;
+	return pqtd.writeToFile();
 }
