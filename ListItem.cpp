@@ -103,12 +103,15 @@ void ListItem::setTodoName(std::string name)
 
 std::istream& operator>>(std::istream& is, ListItem& en)
 {
-	std::time_t tempVal;
+	std::time_t loop, zoop;
 
-	tempVal = std::mktime(en.dateCreated);
-	is >> tempVal;
-	tempVal = std::mktime(en.deadLine);
-	is >> tempVal;
+	loop = std::mktime(en.dateCreated);
+	is >> loop;
+	if(en.deadLine)
+	{
+		zoop = std::mktime(en.deadLine);
+		is >> zoop;
+	}
 	is >> en.itemName;
 
 	return is;
@@ -117,7 +120,8 @@ std::istream& operator>>(std::istream& is, ListItem& en)
 std::ostream& operator<<(std::ostream& os, const ListItem& en)
 {
 	os << en.dateCreated << ", ";
-	os << en.deadLine << ", ";
+	if(en.deadLine)
+		os << en.deadLine << ", ";
 	os << en.itemName << ", ";
 
 	return os;

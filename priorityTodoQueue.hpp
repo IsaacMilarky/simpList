@@ -29,6 +29,7 @@ class priorityQueueTodo
 	//Uses default constructor.
 	public:
 		priorityQueueTodo();
+		priorityQueueTodo(std::string);
 		~priorityQueueTodo();
 		//arg needs to be dynamic
 		bool addTodoItem(ListItem*,float);

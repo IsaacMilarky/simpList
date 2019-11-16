@@ -11,6 +11,15 @@ priorityQueueTodo::priorityQueueTodo()
 	size = 0;
 }
 
+priorityQueueTodo::priorityQueueTodo(std::string file)
+{
+	head = NULL;
+	rear = NULL;
+	size = 0;
+
+	loadFromFile(file);
+}
+
 /*
  * class destructor:
  * kills all of the memory that was allocated by the queue.
@@ -158,7 +167,8 @@ bool priorityQueueTodo::writeToFile()
 
 bool priorityQueueTodo::loadFromFile(std::string fileName)
 {
-	std::ifstream in(fileName.c_str());
+	std::ifstream in;
+	in.open(fileName.c_str());
 	if(!in)
 		return false;
 	
@@ -168,12 +178,13 @@ bool priorityQueueTodo::loadFromFile(std::string fileName)
 	
 	bool success = true;
 
-	do
+	while ( toInsert && in >> *toInsert)
 	{
-		in >> *toInsert;
 		success = addTodoItem(toInsert,1);
-	} while (toInsert && !(in.eof()));
+	} 
 
+	delete toInsert;
+	
 	prioritizeByDateCreated();
 	return success;
 
