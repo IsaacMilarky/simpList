@@ -177,15 +177,18 @@ bool priorityQueueTodo::loadFromFile(std::string fileName)
 		return false;
 	
 	bool success = true;
+	int count = 0;
 
 	while ( toInsert && in >> *toInsert)
 	{
 		success = addTodoItem(toInsert,1);
+		std::cout << ++count << "\n";
 	} 
 
 	delete toInsert;
-	
-	prioritizeByDateCreated();
+	in.close();
+
+	//prioritizeByDateCreated();
 	return success;
 
 }
