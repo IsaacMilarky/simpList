@@ -123,7 +123,6 @@ std::istream& operator>>(std::istream& is, ListItem& en)
 		en.deadLine = localtime(&input);
 	}
 	
-	
 	return is;
 }
 
