@@ -101,27 +101,40 @@ void ListItem::setTodoName(std::string name)
 	return;
 }
 
+/*
+	Standard:
+		Make sure that these operator overloads match up in the 
+		order that they push/pull all members from a given
+		stream. (ints all together, strings all together, etc).
+*/
 std::istream& operator>>(std::istream& is, ListItem& en)
 {
-	std::time_t loop, zoop;
+	//Take in rawInput as string and cast it.
+	std::string rawInput;
+	is >> rawInput;
 
-	loop = std::mktime(en.dateCreated);
-	is >> loop;
-	if(en.deadLine)
+	auto input = std::stol(rawInput);
+	en.dateCreated = localtime(&input);
+
+	is >> rawInput;
+	if(rawInput != "nodeadline")
 	{
-		zoop = std::mktime(en.deadLine);
-		is >> zoop;
+		input = std::stol(rawInput);
+		en.deadLine = localtime(&input);
 	}
-	is >> en.itemName;
-
+	
+	
 	return is;
 }
 
 std::ostream& operator<<(std::ostream& os, const ListItem& en)
 {
-	os << en.dateCreated << ", ";
+	os << std::mktime(en.dateCreated) << ", ";
 	if(en.deadLine)
-		os << en.deadLine << ", ";
+		os << std::mktime(en.deadLine) << ", ";
+	else
+		os << "nodeadline,";
+	
 	os << en.itemName << ", ";
 
 	return os;
