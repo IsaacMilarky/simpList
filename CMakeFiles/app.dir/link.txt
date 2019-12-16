@@ -1,0 +1,1 @@
+/usr/bin/c++  -g  -rdynamic CMakeFiles/app.dir/main.o CMakeFiles/app.dir/ListItem.o CMakeFiles/app.dir/priorityTodoQueue.o  -o app 

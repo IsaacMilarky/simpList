@@ -1,0 +1,3 @@
+/home/isaac/Documents/codeStuff/simpList/CMakeFiles/rebuild_cache.dir
+/home/isaac/Documents/codeStuff/simpList/CMakeFiles/app.dir
+/home/isaac/Documents/codeStuff/simpList/CMakeFiles/edit_cache.dir

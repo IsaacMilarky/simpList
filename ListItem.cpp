@@ -1,5 +1,3 @@
-#include <iostream>
-#include <iomanip>
 #include "ListItem.hpp"
 
 ListItem::ListItem(std::string name)
@@ -113,13 +111,15 @@ std::istream& operator>>(std::istream& is, ListItem& en)
 	std::string rawInput;
 	is >> rawInput;
 
-	auto input = std::stol(rawInput);
+	//Before you ask std::stol was problamatic.
+	time_t input;
+	input = stringToLongInt(rawInput);
 	en.dateCreated = localtime(&input);
 
 	is >> rawInput;
 	if(rawInput != "nodeadline")
 	{
-		input = std::stol(rawInput);
+		input = stringToLongInt(rawInput);
 		en.deadLine = localtime(&input);
 	}
 	

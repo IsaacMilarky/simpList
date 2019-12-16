@@ -3,6 +3,10 @@
 #include <time.h>
 #include <string>
 #include <ctime>
+#include <iostream>
+#include <iomanip>
+#include <assert.h>
+#include <math.h>
 
 /*
  *	Created by: Isaac Milarsky
@@ -11,8 +15,22 @@
  * 
  */
 
+//Had to make own version of std::stol
+long stringToLongInt(std::string str)
+{
+	long convertThis = 0;
+	for(unsigned iter = 0; iter < str.length(); ++iter)
+	{
+		//I'm doing it the c way.
+		long digit = (int)str.at(iter) - '0';
+		convertThis += digit * std::pow(10,iter);
+		std::cout << convertThis << '\n';
+	}
+	return convertThis;
+}
 
 
+//TODO: try to get rid of some of these libraries.
 //TODO: standardize date format storage fmt.
 class ListItem
 {
