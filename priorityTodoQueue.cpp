@@ -86,6 +86,7 @@ void priorityQueueTodo::printTodo()
 	{
 		std::cout << "--------------------------------------------------------\n";
 		iter->key->print();
+		std::cout << iter->priority << "\n";
 		std::cout << "--------------------------------------------------------\n";
 	}
 
@@ -98,20 +99,23 @@ void priorityQueueTodo::prioritizeByDeadLine()
 	int priorityOffset = 0;
 	std::time_t oldestUnixTime = -1;
 
+
 	for(iter = head; iter; iter = iter->next)
 	{
-		if(!iter->key->getDeadLine() == NULL)
+		if(!iter->key->getDeadLine())
 			iter->priority = 0;
 		//std::mktime converts time to seconds since 1/1/1970
 		else if(oldestUnixTime == -1 || std::mktime(iter->key->getDeadLine()) < oldestUnixTime)
 		{
 			oldestUnixTime = std::mktime(iter->key->getDeadLine());
+			std::cout << oldestUnixTime << "/ C iteration\n";
 			iter->priority = ++priorityOffset;	 
 		}
 		else
 		{
 			iter->priority = priorityOffset;
 		}
+		
 	}
 
 	sort();
@@ -142,6 +146,7 @@ void priorityQueueTodo::prioritizeByDateCreated()
 
 //Private
 //TODO: this is bubble sort but should be something better.
+// Currently does not work.
 void priorityQueueTodo::sort()
 {
 	//Decending order.
@@ -151,7 +156,7 @@ void priorityQueueTodo::sort()
 	{
 		int count = 0;
 
-		for(Node * iter = head; iter; iter = iter->next)
+		for(Node * iter = head; iter->next; iter = iter->next)
 		{
 
 			if(iter->priority < iter->next->priority)

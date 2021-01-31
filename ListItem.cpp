@@ -8,7 +8,8 @@ ListItem::ListItem(std::string name)
 	std::time_t now = time(NULL);
 	dateCreated = std::localtime(&now);
 	deadLine = NULL;
-	itemName = name;	
+	itemName = name;
+	itemBody = "";	
 }
 
 ListItem::ListItem(std::string name, std::tm hardLineDeadLine)
@@ -27,6 +28,7 @@ ListItem::ListItem(std::string name, std::tm hardLineDeadLine)
 		*deadLine = hardLineDeadLine;
 
 	itemName = name;
+	itemBody = "";
 }
 
 ListItem::ListItem(std::string name, std::time_t hardLineDeadLine)
@@ -47,6 +49,7 @@ ListItem::ListItem(std::string name, std::time_t hardLineDeadLine)
 	deadLine = std::localtime(&hardLineDeadLine);
 
 	itemName = name;
+	itemBody = "";
 }
 
 
@@ -71,21 +74,6 @@ std::string ListItem::getTodoName()
 	return itemName;
 }
 
-void ListItem::print()
-{
-	//TODO: just make it print out members that exist.
-	/*
-		std::time_t dateCreated;
-		std::time_t * deadLine; //ssh its fine
-		std::string itemName;
-	*/
-
-	std::cout << "toDo: " << itemName << "\n";
-	std::cout << "Item Created on: " << std::put_time(dateCreated,"%c %Z") << "\n";
-	
-	if(deadLine)
-		std::cout << "Item should be completed on: " << std::put_time(deadLine,"%c %Z") << "\n";
-}
 
 void ListItem::setDeadLine(std::tm future)
 {
@@ -102,3 +90,31 @@ void ListItem::setTodoName(std::string name)
 	return;
 }
 
+void ListItem::setTodoBody(std::string body)
+{
+	itemBody = body;
+}
+
+std::string ListItem::getTodoBody()
+{
+	return itemBody;
+}
+
+void ListItem::print()
+{
+	//TODO: just make it print out members that exist.
+	/*
+		std::time_t dateCreated;
+		std::time_t * deadLine; //ssh its fine
+		std::string itemName;
+	*/
+
+	std::cout << "Title: " << itemName << "\n";
+	//Ternery outputs string if it isn't empty, otherwise gives N/A
+	std::string bodyToPrint = itemBody.compare("") != 0 ? "N/A" : itemBody;
+	std::cout << "Body: " << bodyToPrint << "\n";
+	std::cout << "Item Created on: " << std::put_time(dateCreated,"%c %Z") << "\n";
+	
+	if(deadLine)
+		std::cout << "Item should be completed on: " << std::put_time(deadLine,"%c %Z") << "\n";
+}

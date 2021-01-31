@@ -17,7 +17,7 @@ int main(int argc, char* argsv[])
 {
 	auto pqtd = priorityQueueTodo();
 
-	for(int iter = 0; iter < 20; iter++)
+	for(int iter = 1; iter < 20; iter++)
 	{
 		ListItem * ptr = new ListItem("Item " + std::to_string(iter));
 		std::time_t now = std::time(0);
@@ -29,6 +29,7 @@ int main(int argc, char* argsv[])
 		pqtd.addTodoItem(ptr,10.0/((float)iter));
 	}
 
+	pqtd.prioritizeByDeadLine();
 	pqtd.printTodo();
 
 	return 0;

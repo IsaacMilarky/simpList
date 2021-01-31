@@ -30,12 +30,19 @@ class ListItem
 		std::tm * getCreationDate();
 		std::tm * getDeadLine();
 		std::string getTodoName();
-		void print();
 		void setDeadLine(std::tm);
 		void setTodoName(std::string);
+		void setTodoBody(std::string);
+		std::string getTodoBody();
+		void print();
+
 	protected:
 		std::tm * dateCreated;
 		std::tm * deadLine; //ssh its fine
 		std::string itemName;
+		/*
+			Adding a body section to each reminder.
+		*/
+		std::string itemBody;
 		
 };
