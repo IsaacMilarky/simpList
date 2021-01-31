@@ -4,6 +4,7 @@
 
 ListItem::ListItem(std::string name)
 {
+	//now = current system time.
 	std::time_t now = time(NULL);
 	dateCreated = std::localtime(&now);
 	deadLine = NULL;
@@ -22,8 +23,8 @@ ListItem::ListItem(std::string name, std::tm hardLineDeadLine)
 	deadLine = new std::tm;
 	if(!deadLine) //Dont touch
 		std::cout << "Error: everything is on fire: line 24 toDoList.cpp\n";
-
-	*deadLine = hardLineDeadLine;
+	else
+		*deadLine = hardLineDeadLine;
 
 	itemName = name;
 }

@@ -18,6 +18,7 @@ priorityQueueTodo::priorityQueueTodo()
 priorityQueueTodo::~priorityQueueTodo()
 {
 	Node* iter = head;
+	//Wont fire if queue is empty
 	while(iter)
 	{
 		Node* clobberinTime = iter;
@@ -48,6 +49,8 @@ bool priorityQueueTodo::addTodoItem(ListItem * listItemPtr,float priority)
 		return true;
 	}
 
+	//Use a pointer to iterate through p-queue and stop when relevant
+	//sorting index is reached.
 	Node* iter;
 	for(iter = head; iter->next; iter = iter->next)
 	{
@@ -60,6 +63,7 @@ bool priorityQueueTodo::addTodoItem(ListItem * listItemPtr,float priority)
 
 	++size;
 
+	//Replace new first index as the head.
 	if(priority < head->priority)
 	{
 		temp = head;
