@@ -29,7 +29,7 @@ int main(int argc, char* argsv[])
 		pqtd.addTodoItem(ptr,10.0/((float)iter));
 	}
 
-	pqtd.prioritizeByDeadLine();
+	pqtd.prioritizeByDateCreated();
 	pqtd.printTodo();
 
 	return 0;

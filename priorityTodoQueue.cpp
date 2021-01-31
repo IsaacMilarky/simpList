@@ -121,6 +121,7 @@ void priorityQueueTodo::prioritizeByDeadLine()
 	sort();
 }
 
+//Needs large scale testing to make sure is actually good.
 void priorityQueueTodo::prioritizeByDateCreated()
 {
 	Node * iter;
@@ -129,7 +130,7 @@ void priorityQueueTodo::prioritizeByDateCreated()
 
 	for(iter = head; iter; iter = iter->next)
 	{
-		if(oldestUnixTime == -1 || std::mktime(iter->key->getCreationDate()) < oldestUnixTime)
+		if(oldestUnixTime == -1 || std::mktime(iter->key->getCreationDate()) <= oldestUnixTime)
 		{
 			oldestUnixTime = std::mktime(iter->key->getCreationDate());
 			iter->priority = ++priorityOffset;
