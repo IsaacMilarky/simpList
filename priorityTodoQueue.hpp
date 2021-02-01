@@ -33,6 +33,21 @@ class priorityQueueTodo
 		void prioritizeByDeadLine();
 		void prioritizeByDateCreated();
 
+		/*
+		Get/pop head
+		*/
+
+		//Returns heap memory
+		Node* getHead();
+		//Returns reference to popped listItem.
+		ListItem* popHead();
+		//Returns heap memory.
+		Node* getRear();
+		//We don't pop back the rear of the pq as it doesn't make sense logically.
+	
+
+
+
 	private:
 		void sort();
 

@@ -29,8 +29,12 @@ int main(int argc, char* argsv[])
 		pqtd.addTodoItem(ptr,10.0/((float)iter));
 	}
 
-	pqtd.prioritizeByDateCreated();
+	pqtd.prioritizeByDeadLine();
 	pqtd.printTodo();
+
+	ListItem* yo = pqtd.popHead();
+	std::cout << "\n\nyo:\n";
+	yo->print();
 
 	return 0;
 }

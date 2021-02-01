@@ -145,6 +145,31 @@ void priorityQueueTodo::prioritizeByDateCreated()
 	sort();
 }
 
+//Head/rear get/set
+
+Node* priorityQueueTodo::getHead()
+{
+	return head;
+}
+
+ListItem* priorityQueueTodo::popHead()
+{
+	//Get memory of listItem before deleting head.
+	ListItem * toReturn = head->key;
+	//Delete head.
+	Node * clobberinTime = head;
+	head = head->next;
+
+	delete clobberinTime;
+	return toReturn;
+}
+
+Node* priorityQueueTodo::getRear()
+{
+	return rear;
+}
+
+
 //Private
 //TODO: this is bubble sort but should be something better.
 // Currently does not work.
