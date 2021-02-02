@@ -3,6 +3,9 @@
 #include <string>
 #include <ctime>
 #include "priorityTodoQueue.hpp"
+#include <boost/lambda/lambda.hpp>
+#include <iterator>
+#include <algorithm>
 
 /*
 	Note:
@@ -15,26 +18,9 @@ const static std::time_t NOW = std::time(0);
 
 int main(int argc, char* argsv[])
 {
-	auto pqtd = priorityQueueTodo();
+	using namespace boost::lambda;
+    typedef std::istream_iterator<int> in;
 
-	for(int iter = 1; iter < 20; iter++)
-	{
-		ListItem * ptr = new ListItem("Item " + std::to_string(iter));
-		std::time_t now = std::time(0);
-
-		std::tm * endDate = std::localtime(&now);
-		endDate->tm_mon = endDate->tm_mon + iter;
-
-		ptr->setDeadLine(*endDate);
-		pqtd.addTodoItem(ptr,10.0/((float)iter));
-	}
-
-	pqtd.prioritizeByDeadLine();
-	pqtd.printTodo();
-
-	ListItem* yo = pqtd.popHead();
-	std::cout << "\n\nyo:\n";
-	yo->print();
-
-	return 0;
+    std::for_each(
+        in(std::cin), in(), std::cout << (_1 * 3) << " " );
 }

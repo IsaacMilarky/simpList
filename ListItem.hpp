@@ -7,8 +7,8 @@
 /*	
  *	Created by: Isaac Milarsky
  * 	Created on: 11/5/2019
- * 	Last Modified: 11/11/2019
- * 
+ *  //TODO: Be able to serialize list data.
+ * 	In order to do this I'm adding boost libraries to the project.
  */
 
 

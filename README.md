@@ -11,3 +11,5 @@ The primary data structure used in my design is a priority queue that acts as th
 The secondary data structure I have yet to implement is a hash table to store list items in a more permanent fasion in an easily retreiveable manner. This will be a fairly simple design although considerations need to be made for storage overlap. The exact method of serialization will also need to be designed.
 
 Thirdly, the data in the todoList will need to be represented somehow. I plan to make this application solely cli-based and intended for programmers (mainly just practice I don't expect to be too useful). However, given I have time this semester I will make a gui that interacts with the underlying processes. 
+
+I am now adding boost libraries to the project. Boost is unzipped in /libs.
