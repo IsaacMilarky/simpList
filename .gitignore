@@ -1,0 +1,6 @@
+.vscode/
+libs/boost_1_75_0/
+libs/include
+libs/lib
+libs/.DS_Store
+!libs
