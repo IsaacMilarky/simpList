@@ -1,26 +1,18 @@
+#include <boost/regex.hpp>
 #include <iostream>
-#include <vector>
 #include <string>
-#include <ctime>
-#include "priorityTodoQueue.hpp"
-#include <boost/lambda/lambda.hpp>
-#include <iterator>
-#include <algorithm>
 
-/*
-	Note:
-	Ok, so basically i'm gonna make this cli and
-	then just add more and more features from there.
-	Hopefully, this project won't be cli forever.
-*/
-
-const static std::time_t NOW = std::time(0);
-
-int main(int argc, char* argsv[])
+int main()
 {
-	using namespace boost::lambda;
-    typedef std::istream_iterator<int> in;
+    std::string line;
+    boost::regex pat( "^Subject: (Re: |Aw: )*(.*)" );
 
-    std::for_each(
-        in(std::cin), in(), std::cout << (_1 * 3) << " " );
+    while (std::cin)
+    {
+        std::getline(std::cin, line);
+        boost::smatch matches;
+        if (boost::regex_match(line, matches, pat))
+            std::cout << matches[2] << std::endl;
+    }
 }
+

@@ -1,33 +1,34 @@
 #Makefile for simpList application.
 BUILD_FILES ?= ListItem.o main.o priorityTodoQueue.o simpList
 CC = g++
-BASE_FLAGS = -m64 -Wall
+BASE_FLAGS = -Wall
 
 #Base directory and boost directory for headers.
-LDFLAGS = -I./libs/boost_1_71_0
+LDFLAGS = -I libs/boost_1_71_0
 
 #Base directory and boost directory for lib files.
-#LLIBFLAGS = -L/usr/local/Cellar/boost/1.75.0_1 -L/root/boost_1_71_0/stage/lib
+LLIBFLAGS = -L/libs/lib
 
 #Link options
-#LINKFLAGS = -l boost_thread-mt -lboost_system
+LINKSUFFIX = \libs/lib/libboost_regex.a
+LINKFLAGS = -lboost_regex
 
-FLAGS = $(BASE_FLAGS) $(LDFLAGS) #$(LINKFLAGS) $(LLIBFLAGS) 
+FLAGS = $(BASE_FLAGS)  $(LLIBFLAGS) $(LINKFLAGS) 
 
 simpList : main.o ListItem.o priorityTodoQueue.o
 #compile into a file called simpList
-	$(CC) $(FLAGS) main.o ListItem.o priorityTodoQueue.o -o simpList
+	$(CC) $(BASE_FLAGS) $(LDFLAGS) main.o ListItem.o priorityTodoQueue.o -o simpList $(LINKSUFFIX)
 
 #-----------------------------------------------------------------
 
 main.o : main.cpp priorityTodoQueue.hpp ListItem.hpp
-	$(CC) $(FLAGS) -c main.cpp
+	$(CC) $(BASE_FLAGS) $(LLIBFLAGS) -c main.cpp
 
 ListItem.o : ListItem.cpp ListItem.hpp
-	$(CC) $(FLAGS) -c ListItem.cpp
+	$(CC) $(BASE_FLAGS) $(LLIBFLAGS) -c ListItem.cpp
 
 priorityTodoQueue.o : priorityTodoQueue.cpp priorityTodoQueue.hpp ListItem.hpp
-	$(CC) $(FLAGS) -c priorityTodoQueue.cpp
+	$(CC) $(BASE_FLAGS) $(LLIBFLAGS) -c priorityTodoQueue.cpp
 
 
 .PHONY: clean
