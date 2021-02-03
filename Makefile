@@ -10,8 +10,8 @@ LDFLAGS = -I libs/boost_1_71_0
 LLIBFLAGS = -L/libs/lib
 
 #Link options
-LINKSUFFIX = \libs/lib/libboost_regex.a
-LINKFLAGS = -lboost_regex
+LINKSUFFIX = \-Llibs/lib/ -lboost_regex -lboost_serialization
+LINKFLAGS = -lboost_regex -lboost_serialization
 
 FLAGS = $(BASE_FLAGS)  $(LLIBFLAGS) $(LINKFLAGS) 
 

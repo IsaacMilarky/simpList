@@ -3,6 +3,10 @@
 #include <time.h>
 #include <string>
 #include <ctime>
+#include <fstream>
+//Using text serialization for the moment as it can be debugged easier.
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 /*	
  *	Created by: Isaac Milarsky
@@ -17,6 +21,8 @@
 class ListItem
 {
 	public:
+		//Blank constructor for memory purposes sometimes.
+		ListItem();
 		//Default contructor without deadline
 		ListItem(std::string);
 		//Secondary constructor with deadline
@@ -34,9 +40,18 @@ class ListItem
 		void setTodoName(std::string);
 		void setTodoBody(std::string);
 		std::string getTodoBody();
+
 		void print();
+		
 
 	protected:
+		friend class boost::serialization::access;
+		//Taken from: https://www.boost.org/doc/libs/1_75_0/libs/serialization/doc/tutorial.html
+		//We are using Archive similar to a stream operator.
+		//In case Archive is an input & is used similar to >>
+		template<class Archive>
+		void serialize(Archive &, const unsigned int);
+
 		std::tm * dateCreated;
 		std::tm * deadLine; //ssh its fine
 		std::string itemName;

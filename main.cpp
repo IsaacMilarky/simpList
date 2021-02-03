@@ -1,18 +1,31 @@
 #include <boost/regex.hpp>
+#include "priorityTodoQueue.hpp"
+#include <fstream>
 #include <iostream>
 #include <string>
 
 int main()
 {
-    std::string line;
-    boost::regex pat( "^Subject: (Re: |Aw: )*(.*)" );
+    ///Testing serialization of ListItem
+    std::ofstream ofs("filename");
 
-    while (std::cin)
+    const ListItem g("HelloWorld");
+
+    //Save to archive
     {
-        std::getline(std::cin, line);
-        boost::smatch matches;
-        if (boost::regex_match(line, matches, pat))
-            std::cout << matches[2] << std::endl;
+        boost::archive::text_oarchive oa(ofs);
+        oa << g;
     }
+
+    ListItem newItem;
+    {
+        //create and open for input
+        std::ifstream ifs("filename");
+        boost::archive::text_iarchive ia(ifs);
+        //Read class state from archive.
+        ia >> newItem;
+    }
+
+    newItem.print();
 }
 

@@ -2,6 +2,15 @@
 #include <iomanip>
 #include "ListItem.hpp"
 
+ListItem::ListItem()
+{
+	std::time_t now = time(NULL);
+	dateCreated = std::localtime(&now);
+	deadLine = NULL;
+	itemName = "N/A";
+	itemBody = "";
+}
+
 ListItem::ListItem(std::string name)
 {
 	//now = current system time.
@@ -117,4 +126,17 @@ void ListItem::print()
 	
 	if(deadLine)
 		std::cout << "Item should be completed on: " << std::put_time(deadLine,"%c %Z") << "\n";
+}
+
+//Taken from boost example given.
+template<class Archive>
+void ListItem::serialize(Archive & ar, const unsigned int version)
+{
+	//Differant from example. Gives member info to the archive.
+	//Important to store data and not pointers.
+	ar & itemName;
+	ar & itemBody;
+	//Now for the hard ones.
+	ar & (dateCreated ? *dateCreated : std::tm());
+	ar & (deadLine ? *deadLine : std::tm());
 }
