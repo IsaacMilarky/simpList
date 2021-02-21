@@ -1,3 +1,4 @@
+#include "SimpListConfig.h"
 #include "priorityTodoQueue.hpp"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -5,8 +6,13 @@
 #include <iostream>
 #include <string>
 
-int main()
+int main(int argc, char * argv[])
 {
+    //Print Version number
+    std::cout << argv[0] << " Version " << SimpList_VERSION_MAJOR << "."
+        << SimpList_VERSION_MINOR << std::endl;
+    //const double inputValue = std::stod(argv[1]);
+    
     ///Testing serialization of ListItem
     std::ofstream ofs("filename");
 
