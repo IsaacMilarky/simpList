@@ -128,15 +128,3 @@ void ListItem::print()
 		std::cout << "Item should be completed on: " << std::put_time(deadLine,"%c %Z") << "\n";
 }
 
-//Taken from boost example given.
-template<class Archive>
-void ListItem::serialize(Archive & ar, const unsigned int version)
-{
-	//Differant from example. Gives member info to the archive.
-	//Important to store data and not pointers.
-	ar & itemName;
-	ar & itemBody;
-	//Now for the hard ones.
-	ar & (dateCreated ? *dateCreated : std::tm());
-	ar & (deadLine ? *deadLine : std::tm());
-}

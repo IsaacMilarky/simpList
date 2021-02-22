@@ -1,7 +1,7 @@
 #include "SimpListConfig.h"
-#include "priorityTodoQueue.hpp"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include "ListItem.hpp"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -17,7 +17,7 @@ int main(int argc, char * argv[])
     std::ofstream ofs("filename");
 
     const ListItem g("HelloWorld");
-
+    
     //Save to archive
     {
         boost::archive::text_oarchive oa(ofs);

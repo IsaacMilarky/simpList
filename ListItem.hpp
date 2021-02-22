@@ -49,8 +49,20 @@ class ListItem
 		//Taken from: https://www.boost.org/doc/libs/1_75_0/libs/serialization/doc/tutorial.html
 		//We are using Archive similar to a stream operator.
 		//In case Archive is an input & is used similar to >>
+		//Taken from boost example given.
 		template<class Archive>
-		void serialize(Archive &, const unsigned int);
+		void serialize(Archive & ar, const unsigned int version)
+		{
+			//Differant from example. Gives member info to the archive.
+			//Important to store data and not pointers.
+			ar & itemName;
+			ar & itemBody;
+			//Now for the hard ones.
+			/*if(dateCreated)
+				ar & *dateCreated;
+			if(deadLine)
+				ar & *deadLine;*/
+		}		
 
 		std::tm * dateCreated;
 		std::tm * deadLine; //ssh its fine
