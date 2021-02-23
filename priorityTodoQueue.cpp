@@ -102,12 +102,13 @@ void priorityQueueTodo::prioritizeByDeadLine()
 
 	for(iter = head; iter; iter = iter->next)
 	{
-		if(!iter->key->getDeadLine())
+		std::tm toTimestruct = boost::posix_time::to_tm(iter->key->getDeadLine());
+		if((iter->key->getDeadLine()).is_not_a_date_time())
 			iter->priority = 0;
 		//std::mktime converts time to seconds since 1/1/1970
-		else if(oldestUnixTime == -1 || std::mktime(iter->key->getDeadLine()) < oldestUnixTime)
+		else if(oldestUnixTime == -1 || std::mktime(&toTimestruct) < oldestUnixTime)
 		{
-			oldestUnixTime = std::mktime(iter->key->getDeadLine());
+			oldestUnixTime = std::mktime(&toTimestruct);
 			std::cout << oldestUnixTime << "/ C iteration\n";
 			iter->priority = ++priorityOffset;	 
 		}
@@ -130,9 +131,10 @@ void priorityQueueTodo::prioritizeByDateCreated()
 
 	for(iter = head; iter; iter = iter->next)
 	{
-		if(oldestUnixTime == -1 || std::mktime(iter->key->getCreationDate()) <= oldestUnixTime)
+		std::tm toTimestruct = boost::posix_time::to_tm(iter->key->getCreationDate());
+		if(oldestUnixTime == -1 || std::mktime(&toTimestruct) <= oldestUnixTime)
 		{
-			oldestUnixTime = std::mktime(iter->key->getCreationDate());
+			oldestUnixTime = std::mktime(&toTimestruct);
 			iter->priority = ++priorityOffset;
 		}
 		else

@@ -16,7 +16,8 @@ int main(int argc, char * argv[])
     ///Testing serialization of ListItem
     std::ofstream ofs("filename");
 
-    const ListItem g("HelloWorld");
+    ListItem g("HelloWorld");
+    g.setTodoBody("Good morning world and all who inhabit it!");
     
     //Save to archive
     {

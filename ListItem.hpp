@@ -7,6 +7,10 @@
 //Using text serialization for the moment as it can be debugged easier.
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+//Upgrade to a more complicated Date time format
+#include <boost/date_time.hpp>
+#include <boost/date_time/gregorian/greg_serialize.hpp>
+#include <boost/date_time/posix_time/time_serialize.hpp>
 
 /*	
  *	Created by: Isaac Milarsky
@@ -29,14 +33,18 @@ class ListItem
 		ListItem(std::string, std::tm);
 		//Tertiary constructor for diff. time measure
 		ListItem(std::string, std::time_t);
-		//Free the pointer to deadline if it exists.
-		~ListItem();
+		//Another constructor for best time measure
+		ListItem(std::string,boost::gregorian::date);
+		//Yet another overload
+		ListItem(std::string,boost::posix_time::ptime);
 
 		//Getters and Setters
-		std::tm * getCreationDate();
-		std::tm * getDeadLine();
+		boost::posix_time::ptime getCreationDate();
+		boost::posix_time::ptime getDeadLine();
 		std::string getTodoName();
 		void setDeadLine(std::tm);
+		void setDeadLine(boost::gregorian::date);
+		void setDeadLine(boost::posix_time::ptime);
 		void setTodoName(std::string);
 		void setTodoBody(std::string);
 		std::string getTodoBody();
@@ -47,6 +55,11 @@ class ListItem
 	protected:
 		friend class boost::serialization::access;
 		//Taken from: https://www.boost.org/doc/libs/1_75_0/libs/serialization/doc/tutorial.html
+		template<class archive_type, class temporal_type>
+      	void save_to(archive_type& ar, const temporal_type& tt)
+      	{
+        	ar << tt;
+      	}
 		//We are using Archive similar to a stream operator.
 		//In case Archive is an input & is used similar to >>
 		//Taken from boost example given.
@@ -57,15 +70,17 @@ class ListItem
 			//Important to store data and not pointers.
 			ar & itemName;
 			ar & itemBody;
+			//std::cout << "Body:" << itemBody << std::endl;
 			//Now for the hard ones.
-			/*if(dateCreated)
-				ar & *dateCreated;
-			if(deadLine)
-				ar & *deadLine;*/
+			ar & dateCreated;
+
+			if(!deadLine.is_not_a_date_time())
+				ar & deadLine;
 		}		
 
-		std::tm * dateCreated;
-		std::tm * deadLine; //ssh its fine
+		//We want to store times as a simple numeral if possible.
+		boost::posix_time::ptime dateCreated;
+		boost::posix_time::ptime deadLine; //ssh its fine
 		std::string itemName;
 		/*
 			Adding a body section to each reminder.
