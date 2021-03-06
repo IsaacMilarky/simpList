@@ -6,6 +6,9 @@
 #include <iostream>
 #include <string>
 
+//Where to save listItems
+const std::string LISTITEM_STORE = "listitems";
+
 int main(int argc, char * argv[])
 {
     //Print Version number
@@ -19,9 +22,9 @@ int main(int argc, char * argv[])
     //Wrapper _should_ handle overhead presented by multi-serialization.
     ListItemLoadWrapper wrapper = ListItemLoadWrapper();
     wrapper.addItem(g);
-    wrapper.writeToFile("filename");
+    wrapper.writeToFile(LISTITEM_STORE);
     wrapper = ListItemLoadWrapper();
-    wrapper.loadFromFile("filename");
+    wrapper.loadFromFile(LISTITEM_STORE);
 
     wrapper.wrapArray.at(0).print();
 }
