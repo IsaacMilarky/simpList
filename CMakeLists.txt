@@ -23,7 +23,7 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost 1.75.0 COMPONENTS serialization)
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
-    add_executable(SimpList ListItem.cpp priorityTodoQueue.cpp main.cpp)
+    add_executable(SimpList ListItem.cpp ListItemLoadWrapper.cpp priorityTodoQueue.cpp main.cpp)
     target_link_libraries(SimpList ${Boost_LIBRARIES})
 endif()
 

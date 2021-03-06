@@ -44,8 +44,6 @@ class priorityQueueTodo
 		//Returns heap memory.
 		Node* getRear();
 		//We don't pop back the rear of the pq as it doesn't make sense logically.
-	
-
 
 
 	private:
