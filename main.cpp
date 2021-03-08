@@ -28,7 +28,7 @@ int main(int argc, char * argv[])
     wrapper = ListItemLoadWrapper();
     wrapper.loadFromFile(LISTITEM_STORE);
 
-    wrapper.wrapArray.at(0).print();
+    //wrapper.wrapArray.at(0).print();
 
     TodoController controller = TodoController();
     controller.getLists();

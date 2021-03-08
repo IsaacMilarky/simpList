@@ -32,7 +32,7 @@ TodoController::TodoController()
             std::size_t fPos = current_file.find(".list");
 
             std::cout << current_file.substr(iPos + 1,fPos - 1) << std::endl;
-            listFiles.push_back(current_file.substr(iPos + 1,fPos - 1));
+            listFiles.push_back(current_file.substr(iPos + 1));
         }
     }
 
@@ -40,19 +40,20 @@ TodoController::TodoController()
     //Load if any files are found.
     if(listFiles.size() > 0)
     {
-        for(auto file = listFiles.begin(); file != listFiles.end(); ++file)
+        for(unsigned int iter = 0; iter < listFiles.size(); ++iter)
         {
             listWrapper = ListItemLoadWrapper();
-            std::cout << *file << std::endl;
-            listWrapper.loadFromFile(*file);
+            std::cout << listFiles.at(iter) << std::endl;
+            listWrapper.loadFromFile(listFiles.at(iter));
 
+            std::size_t fPos = listFiles.at(iter).find(".list");
             //Create starter objects.
-            priorityQueueTodo * toAdd = new priorityQueueTodo(*file);
+            priorityQueueTodo * toAdd = new priorityQueueTodo(listFiles.at(iter).substr(0,fPos));
 
             //Add list Items to starter objects.
             for(auto item = listWrapper.wrapArray.begin(); item != listWrapper.wrapArray.end(); ++item)
             {
-                toAdd->addTodoItem(item,1.0);
+                toAdd->addTodoItem(&(*item),1.0);
             }
             //Store address of list in lists fector
             lists.push_back(toAdd);
@@ -65,22 +66,22 @@ TodoController::TodoController()
 TodoController::~TodoController()
 {
     //Iterate and save each list.
-    for(auto list = lists.begin(); list != lists.end(); ++list)
+    for(unsigned int iter = 0; iter < lists.size(); ++iter)
     {
         listWrapper = ListItemLoadWrapper();
         //Pop head, null at end of queue.
-        ListItem * head = *list->popHead();
+        ListItem * head = lists.at(iter)->popHead();
         while(head)
         {
             //Add list to wrapper.
             listWrapper.addItem(*(head));
-            head = *list->popHead();
+            head = lists.at(iter)->popHead();
         }
 
-        listWrapper.writeToFile(*list->getName() + ".list");
+        listWrapper.writeToFile(lists.at(iter)->getName() + ".list");
         
         //Free the memory
-        delete *list;
+        delete lists.at(iter);
     }
 
 }
@@ -90,21 +91,16 @@ std::vector<std::string> TodoController::getLists()
 {
     std::vector<std::string> toReturn;
 
-    for(auto list = lists.begin(); list != lists.end(); ++list)
+    for(unsigned int iter = 0; iter < lists.size(); ++iter)
     {
-        toReturn.push_back(*list->getName());
+        toReturn.push_back(lists.at(iter)->getName());
 
         //List Title.
-        std::cout << "List: " << *list->getName() << std::endl;
+        std::cout << "List: " << lists.at(iter)->getName() << std::endl;
         //print
-        *list->printTodo();
+        lists.at(iter)->printTodo();
     }
 
     return toReturn;
 }
 
-
-void TodoController::addToList(std::string listName);
-{
-    
-}

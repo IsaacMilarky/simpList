@@ -172,10 +172,15 @@ Node* priorityQueueTodo::getHead()
 ListItem* priorityQueueTodo::popHead()
 {
 	//Get memory of listItem before deleting head.
-	ListItem * toReturn = head->key;
+	ListItem * toReturn;
+	if(head)
+		toReturn = head->key;
+	else
+		toReturn = NULL;
 	//Delete head.
 	Node * clobberinTime = head;
-	head = head->next;
+	if(head)
+		head = head->next;
 
 	delete clobberinTime;
 	return toReturn;
