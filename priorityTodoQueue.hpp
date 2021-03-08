@@ -26,12 +26,15 @@ class priorityQueueTodo
 	//Uses default constructor.
 	public:
 		priorityQueueTodo();
+		priorityQueueTodo(std::string);
 		~priorityQueueTodo();
 		//arg needs to be dynamic
 		bool addTodoItem(ListItem*,float);
 		void printTodo();
 		void prioritizeByDeadLine();
 		void prioritizeByDateCreated();
+
+		std::string getName();
 
 		/*
 		Get/pop head
@@ -48,7 +51,7 @@ class priorityQueueTodo
 
 	private:
 		void sort();
-
+		std::string listName;
 		int size;
 		Node *head,*rear;
 		

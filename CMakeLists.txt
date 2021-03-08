@@ -20,10 +20,10 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
-find_package(Boost 1.75.0 COMPONENTS serialization)
+find_package(Boost 1.75.0 COMPONENTS serialization filesystem)
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
-    add_executable(SimpList ListItem.cpp ListItemLoadWrapper.cpp priorityTodoQueue.cpp main.cpp)
+    add_executable(SimpList ListItem.cpp ListItemLoadWrapper.cpp priorityTodoQueue.cpp TodoController.cpp main.cpp)
     target_link_libraries(SimpList ${Boost_LIBRARIES})
 endif()
 

@@ -9,6 +9,16 @@ priorityQueueTodo::priorityQueueTodo()
 	head = NULL;
 	rear = NULL;
 	size = 0;
+	//Default name.
+	listName = std::to_string(std::time(0));
+}
+
+priorityQueueTodo::priorityQueueTodo(std::string title)
+{
+	head = NULL;
+	rear = NULL;
+	size = 0;
+	listName = title;
 }
 
 /*
@@ -148,6 +158,11 @@ void priorityQueueTodo::prioritizeByDateCreated()
 }
 
 //Head/rear get/set
+
+std::string priorityQueueTodo::getName()
+{
+	return listName;
+}
 
 Node* priorityQueueTodo::getHead()
 {

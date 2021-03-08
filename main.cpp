@@ -1,13 +1,15 @@
 #include "SimpListConfig.h"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
-#include "ListItemLoadWrapper.hpp"
+#include <boost/filesystem.hpp>
+#include "TodoController.hpp"
 #include <fstream>
 #include <iostream>
 #include <string>
 
 //Where to save listItems
-const std::string LISTITEM_STORE = "listitems";
+const std::string LISTITEM_STORE = "listitems.list";
+
 
 int main(int argc, char * argv[])
 {
@@ -27,5 +29,10 @@ int main(int argc, char * argv[])
     wrapper.loadFromFile(LISTITEM_STORE);
 
     wrapper.wrapArray.at(0).print();
+
+    TodoController controller = TodoController();
+    controller.getLists();
+
+    
 }
 
