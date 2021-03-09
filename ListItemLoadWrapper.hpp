@@ -17,10 +17,10 @@ class ListItemLoadWrapper
         ~ListItemLoadWrapper();
 
         //Add items by pass
-        void addItem(ListItem&);
+        void addItem(ListItem*);
         void loadFromFile(std::string);
         void writeToFile(std::string);
-        
+
         std::vector<ListItem> wrapArray;
     private:
         friend class boost::serialization::access;

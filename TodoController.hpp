@@ -24,7 +24,5 @@ class TodoController
     private:
         //Lists are stored on heap, make sure to destruct that memory.
         std::vector<priorityQueueTodo *> lists;
-        ListItemLoadWrapper listWrapper;
-
 
 };

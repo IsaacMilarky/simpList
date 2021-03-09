@@ -29,58 +29,56 @@ TodoController::TodoController()
         if(boost::filesystem::is_regular_file(itr->path()) && hasEnding(current_file,".list"))
         {
             std::size_t iPos = current_file.find("/");
-            std::size_t fPos = current_file.find(".list");
+            //std::size_t fPos = current_file.find(".list");
 
-            std::cout << current_file.substr(iPos + 1,fPos - 1) << std::endl;
+            //std::cout << current_file.substr(iPos + 1,fPos - 1) << std::endl;
             listFiles.push_back(current_file.substr(iPos + 1));
         }
     }
 
 
-    //Load if any files are found.
-    if(listFiles.size() > 0)
+    for(int iter = 0; iter < listFiles.size(); iter++)
     {
-        for(unsigned int iter = 0; iter < listFiles.size(); ++iter)
+        //Load from file, This is tricky as hell beware.
+        ListItemLoadWrapper loadFromDrive = ListItemLoadWrapper();
+        //std::cout << listFiles.at(iter) << std::endl;
+        loadFromDrive.loadFromFile(listFiles.at(iter));
+
+        //Load Each item into a PQ.
+        priorityQueueTodo * newList = new priorityQueueTodo(listFiles.at(iter));
+
+        //Add each loaded listitem into the pq by address.
+        for(int item = 0; item < loadFromDrive.wrapArray.size(); item++)
         {
-            listWrapper = ListItemLoadWrapper();
-            std::cout << listFiles.at(iter) << std::endl;
-            listWrapper.loadFromFile(listFiles.at(iter));
-
-            std::size_t fPos = listFiles.at(iter).find(".list");
-            //Create starter objects.
-            priorityQueueTodo * toAdd = new priorityQueueTodo(listFiles.at(iter).substr(0,fPos));
-
-            //Add list Items to starter objects.
-            for(auto item = listWrapper.wrapArray.begin(); item != listWrapper.wrapArray.end(); ++item)
-            {
-                toAdd->addTodoItem(&(*item),1.0);
-            }
-            //Store address of list in lists fector
-            lists.push_back(toAdd);
+            newList->addTodoItem(&loadFromDrive.wrapArray.at(item),1.0);
         }
+
+        //Add to class
+        lists.push_back(newList);
     }
+        
 
 }
 
-
+///TODO:Saving list body corrupts data, find out why.
+//Seems to have to do with listWrapper being reset. Use it differantly.
 TodoController::~TodoController()
 {
     //Iterate and save each list.
     for(unsigned int iter = 0; iter < lists.size(); ++iter)
     {
-        listWrapper = ListItemLoadWrapper();
-        //Pop head, null at end of queue.
+        ListItemLoadWrapper saveToDrive = ListItemLoadWrapper();
+
         ListItem * head = lists.at(iter)->popHead();
+
         while(head)
         {
-            //Add list to wrapper.
-            listWrapper.addItem(*(head));
+            saveToDrive.addItem(head);
             head = lists.at(iter)->popHead();
         }
 
-        listWrapper.writeToFile(lists.at(iter)->getName() + ".list");
-        
-        //Free the memory
+        saveToDrive.writeToFile("test");
+        //delete data
         delete lists.at(iter);
     }
 

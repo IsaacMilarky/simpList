@@ -2,7 +2,7 @@
 
 ListItemLoadWrapper::ListItemLoadWrapper()
 {
-
+    
 }
 
 ListItemLoadWrapper::~ListItemLoadWrapper()
@@ -10,9 +10,9 @@ ListItemLoadWrapper::~ListItemLoadWrapper()
 
 }
 
-void ListItemLoadWrapper::addItem(ListItem& toAdd)
+void ListItemLoadWrapper::addItem(ListItem * toAdd)
 {
-    wrapArray.push_back(toAdd);
+    wrapArray.push_back(*toAdd);
 }
 
 void ListItemLoadWrapper::loadFromFile(std::string filename)

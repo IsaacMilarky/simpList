@@ -48,7 +48,13 @@ bool priorityQueueTodo::addTodoItem(ListItem * listItemPtr,float priority)
 		return false;
 	}
 
-	toAdd->key = listItemPtr;
+	//We are now storing on the heap because memory errors.
+	//toAdd->key = listItemPtr;
+	ListItem * copyData = new ListItem();
+	*copyData = *listItemPtr;
+	toAdd->key = copyData;
+
+	//toAdd->key->print();
 	toAdd->priority = priority;
 	toAdd->next = NULL;
 
@@ -174,7 +180,11 @@ ListItem* priorityQueueTodo::popHead()
 	//Get memory of listItem before deleting head.
 	ListItem * toReturn;
 	if(head)
+	{
 		toReturn = head->key;
+		//std::cout << head->key->getTodoBody() << std::endl;
+		//toReturn->print();
+	}
 	else
 		toReturn = NULL;
 	//Delete head.

@@ -69,6 +69,7 @@ class ListItem
 			//Differant from example. Gives member info to the archive.
 			//Important to store data and not pointers.
 			ar & itemName;
+			
 			ar & itemBody;
 			//std::cout << "Body:" << itemBody << std::endl;
 			//Now for the hard ones.
