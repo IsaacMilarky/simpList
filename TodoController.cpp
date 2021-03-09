@@ -77,7 +77,7 @@ TodoController::~TodoController()
             head = lists.at(iter)->popHead();
         }
 
-        saveToDrive.writeToFile("test");
+        saveToDrive.writeToFile(lists.at(iter)->getName());
         //delete data
         delete lists.at(iter);
     }
@@ -102,3 +102,180 @@ std::vector<std::string> TodoController::getLists()
     return toReturn;
 }
 
+void TodoController::addToList(std::string list)
+{
+    //Find list with name list
+    bool listFound = false;
+    unsigned int listIndex;
+
+    for(unsigned int iter = 0; iter < lists.size(); ++iter)
+    {
+        //Test each list
+        if(lists.at(iter)->getName().compare(list) == 0)
+        {
+            listFound = true;
+            listIndex = iter;
+        }
+    }
+
+    if(listFound)
+    {
+        //Prompts for adding new list item.
+        std::string itemName;
+        std::string itemBody;
+        boost::posix_time::ptime deadLine;
+
+        std::string prompt;
+
+        //Get data from user
+        std::cout << "Please input item name: ";
+        getline(std::cin,itemName);
+        std::cout << std::endl;
+
+        //Ask if they want to add a deadline.
+        std::cout << "Would you like to add a deadline? (y/n): ";
+        getline(std::cin, prompt);
+        std::cout << std::endl;
+
+        if(prompt.compare("y") == 0 || prompt.compare("Y") == 0)
+        {
+            //Prompt for year. defaults to current year.
+            int year;
+            std::cout << "Year: ";
+            getline(std::cin,prompt);
+            if(prompt.empty())
+            {
+                year = boost::posix_time::second_clock::local_time().date().year();
+                std::cout << "Current year: " << year << std::endl;
+            }
+            else
+            {
+                std::string::size_type sz; //alias of size_t.
+                year = std::stoi(prompt,&sz); //String to int for prompt.
+            }
+
+            //Prompt for month, defaults to current month.
+            int month;
+            std::cout << "Month(1-12): ";
+            getline(std::cin,prompt);
+            std::cout << std::endl;
+
+            if(prompt.empty())
+            {
+                month = boost::posix_time::second_clock::local_time().date().month();
+            }
+            else
+            {
+                //Make sure is valid month.
+                std::string::size_type sz;
+                month = std::stoi(prompt,&sz);
+                if(month < 1 || month > 12)
+                    month = boost::posix_time::second_clock::local_time().date().month();
+            }
+            
+            //Prompt for day, defaults to current day.
+            int day;
+
+            //Get how many days are in month.
+            boost::gregorian::date d(2002,month,10);
+            int howManyDaysInMonth = d.end_of_month().day();
+
+            std::cout << "Day(1-" << howManyDaysInMonth << "): ";
+            getline(std::cin,prompt);
+            std::cout << std::endl;
+
+            if(prompt.empty())
+            {
+                day = boost::posix_time::second_clock::local_time().date().day();
+            }
+            else
+            {
+                std::string::size_type sz;
+                day = std::stoi(prompt,&sz);
+                if(day < 1 || day > howManyDaysInMonth)
+                {
+                    std::cout << "Invalid day!" << std::endl;
+                    day = boost::posix_time::second_clock::local_time().date().day();
+                }
+            }
+
+            //Get offset from start of day in hours and minute.
+            //Defaults to midnight, e.g. (0,0)
+            short int hours, minutes;
+            std::cout << "Please input time of day: ";
+            getline(std::cin,prompt);
+            if(prompt.empty())
+            {
+                hours = 0;
+                minutes = 0;
+            }
+            else
+            {
+                std::string::size_type sz;
+                //Get hour from input.
+                std::string::size_type seperator = prompt.find(":");
+                if(seperator != std::string::npos)
+                {
+                    std::string hourString = prompt.substr(0,seperator);
+                    hours = std::stoi(hourString,&sz);
+                }
+                else
+                {
+                    hours = 0;
+                }
+
+                //Get minute from input
+                std::string::size_type beforePM = prompt.find("M");
+                --beforePM; //Get either A or P from string.
+                if(seperator != std::string::npos && beforePM != std::string::npos)
+                {
+                    std::string minuteString = prompt.substr(seperator,beforePM);
+                    minutes = std::stoi(minuteString,&sz);
+                }
+                else
+                {
+                    minutes = 0;
+                }
+
+                //If PM
+                if(prompt.find("PM") != std::string::npos)
+                    hours+= 12;
+            }
+
+            deadLine = boost::posix_time::ptime(boost::gregorian::date(year,month,day),
+                boost::posix_time::hours(hours) + boost::posix_time::minutes(minutes));
+        }
+        //If not Y deadLine => not_a_date_time
+
+        //ask if they want an item body.
+        std::cout << "Would you like to add a body? (y/n): ";
+        getline(std::cin,prompt);
+        if(prompt.compare("y") == 0 || prompt.compare("Y") == 0)
+        {
+            std::cout << "Enter body: ";
+            getline(std::cin,itemBody);
+            std::cout << std::endl;
+        }
+        else
+        {
+            itemBody = "";
+        }
+
+        //Add item.
+        ListItem toAdd;
+        
+        if(deadLine.is_not_a_date_time())
+        {
+            toAdd = ListItem(itemName);
+        }
+        else
+            toAdd = ListItem(itemName,deadLine);
+
+        if(itemBody.compare("") != 0)
+            toAdd.setTodoBody(itemBody);
+
+        lists.at(listIndex)->addTodoItem(&toAdd,1.0);
+    }
+    else
+        std::cout << "List Entered was not found." << std::endl;
+}

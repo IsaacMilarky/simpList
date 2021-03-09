@@ -18,18 +18,9 @@ int main(int argc, char * argv[])
         << SimpList_VERSION_MINOR << std::endl;
     //const double inputValue = std::stod(argv[1]);
     
-    /*
-    ListItem g("HelloWorld");
-    g.setTodoBody("I love chili dogs");
-    
-    //Wrapper _should_ handle overhead presented by multi-serialization.
-    ListItemLoadWrapper wrapper = ListItemLoadWrapper();
-    wrapper.addItem(&g);
-    wrapper.writeToFile(LISTITEM_STORE);
-    wrapper = ListItemLoadWrapper();
-    //wrapper.loadFromFile(LISTITEM_STORE);
-    */
+
     TodoController controller = TodoController();
+    controller.addToList("listitems.list");
     controller.getLists();
 
     
