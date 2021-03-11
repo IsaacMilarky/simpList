@@ -102,23 +102,12 @@ std::vector<std::string> TodoController::getLists()
     return toReturn;
 }
 
+//This is too bloated and needs to be subdivided.
 void TodoController::addToList(std::string list)
 {
-    //Find list with name list
-    bool listFound = false;
-    unsigned int listIndex;
+    priorityQueueTodo * list = this->getList(list);
 
-    for(unsigned int iter = 0; iter < lists.size(); ++iter)
-    {
-        //Test each list
-        if(lists.at(iter)->getName().compare(list) == 0)
-        {
-            listFound = true;
-            listIndex = iter;
-        }
-    }
-
-    if(listFound)
+    if(list != nullptr)
     {
         //Prompts for adding new list item.
         std::string itemName;
@@ -139,111 +128,8 @@ void TodoController::addToList(std::string list)
 
         if(prompt.compare("y") == 0 || prompt.compare("Y") == 0)
         {
-            //Prompt for year. defaults to current year.
-            int year;
-            std::cout << "Year: ";
-            getline(std::cin,prompt);
-            if(prompt.empty())
-            {
-                year = boost::posix_time::second_clock::local_time().date().year();
-                std::cout << "Current year: " << year << std::endl;
-            }
-            else
-            {
-                std::string::size_type sz; //alias of size_t.
-                year = std::stoi(prompt,&sz); //String to int for prompt.
-            }
 
-            //Prompt for month, defaults to current month.
-            int month;
-            std::cout << "Month(1-12): ";
-            getline(std::cin,prompt);
-            std::cout << std::endl;
-
-            if(prompt.empty())
-            {
-                month = boost::posix_time::second_clock::local_time().date().month();
-            }
-            else
-            {
-                //Make sure is valid month.
-                std::string::size_type sz;
-                month = std::stoi(prompt,&sz);
-                if(month < 1 || month > 12)
-                    month = boost::posix_time::second_clock::local_time().date().month();
-            }
-            
-            //Prompt for day, defaults to current day.
-            int day;
-
-            //Get how many days are in month.
-            boost::gregorian::date d(2002,month,10);
-            int howManyDaysInMonth = d.end_of_month().day();
-
-            std::cout << "Day(1-" << howManyDaysInMonth << "): ";
-            getline(std::cin,prompt);
-            std::cout << std::endl;
-
-            if(prompt.empty())
-            {
-                day = boost::posix_time::second_clock::local_time().date().day();
-            }
-            else
-            {
-                std::string::size_type sz;
-                day = std::stoi(prompt,&sz);
-                if(day < 1 || day > howManyDaysInMonth)
-                {
-                    std::cout << "Invalid day!" << std::endl;
-                    day = boost::posix_time::second_clock::local_time().date().day();
-                }
-            }
-
-            //Get offset from start of day in hours and minute.
-            //Defaults to midnight, e.g. (0,0)
-            short int hours, minutes;
-            std::cout << "Please input time of day: ";
-            getline(std::cin,prompt);
-            if(prompt.empty())
-            {
-                hours = 0;
-                minutes = 0;
-            }
-            else
-            {
-                std::string::size_type sz;
-                //Get hour from input.
-                std::string::size_type seperator = prompt.find(":");
-                if(seperator != std::string::npos)
-                {
-                    std::string hourString = prompt.substr(0,seperator);
-                    hours = std::stoi(hourString,&sz);
-                }
-                else
-                {
-                    hours = 0;
-                }
-
-                //Get minute from input
-                std::string::size_type beforePM = prompt.find("M");
-                --beforePM; //Get either A or P from string.
-                if(seperator != std::string::npos && beforePM != std::string::npos)
-                {
-                    std::string minuteString = prompt.substr(seperator,beforePM);
-                    minutes = std::stoi(minuteString,&sz);
-                }
-                else
-                {
-                    minutes = 0;
-                }
-
-                //If PM
-                if(prompt.find("PM") != std::string::npos)
-                    hours+= 12;
-            }
-
-            deadLine = boost::posix_time::ptime(boost::gregorian::date(year,month,day),
-                boost::posix_time::hours(hours) + boost::posix_time::minutes(minutes));
+            deadLine = this->promptDate();
         }
         //If not Y deadLine => not_a_date_time
 
@@ -274,8 +160,161 @@ void TodoController::addToList(std::string list)
         if(itemBody.compare("") != 0)
             toAdd.setTodoBody(itemBody);
 
-        lists.at(listIndex)->addTodoItem(&toAdd,1.0);
+        list->addTodoItem(&toAdd,1.0);
     }
     else
         std::cout << "List Entered was not found." << std::endl;
+}
+
+priorityQueueTodo * TodoController::getList(std::string listName)
+{
+    //Find list with name list
+    for(unsigned int iter = 0; iter < lists.size(); ++iter)
+    {
+        //Test each list
+        if(lists.at(iter)->getName().compare(list) == 0)
+        {
+            return lists.at(iter);
+        }
+    }
+
+    return nullptr;
+}
+
+boost::posix_time::ptime TodoController::promptDate()
+{
+    //Prompt for year. defaults to current year.
+    int year;
+    year = this->promptYear();
+    
+    //Prompt for month, defaults to current month.
+    int month;
+    month = this->promptMonth();
+            
+    //Prompt for day, defaults to current day.
+    int day;
+    day = this->promptday(month);
+    
+    //Prompt for hour:minute in return constructor.
+    return boost::posix_time::ptime(boost::gregorian::date(year,month,day), this->promptTime());
+}
+
+
+int TodoController::promptYear()
+{
+    std::string prompt;
+    std::cout << "Year: ";
+    getline(std::cin,prompt);
+    if(prompt.empty())
+    {
+        return boost::posix_time::second_clock::local_time().date().year();
+    }
+    else
+    {
+        std::string::size_type sz; //alias of size_t.
+        return std::stoi(prompt,&sz); //String to int for prompt.
+}
+
+int TodoController::promptMonth()
+{
+    std::string prompt;
+    std::cout << "Month(1-12): ";
+    getline(std::cin,prompt);
+    std::cout << std::endl;
+
+    if(prompt.empty())
+    {
+        return boost::posix_time::second_clock::local_time().date().month();
+    }
+    else
+    {
+        //Make sure is valid month.
+        std::string::size_type sz;
+        int month;
+        month = std::stoi(prompt,&sz);
+        if(month < 1 || month > 12)
+            month = boost::posix_time::second_clock::local_time().date().month();
+        
+        return month;
+    }
+}
+
+//month is 1-12
+int TodoController::promptDay(int month)
+{
+    //Get how many days are in month.
+    boost::gregorian::date d(2002,month,10);
+    int howManyDaysInMonth = d.end_of_month().day();
+    std::string prompt;
+
+    std::cout << "Day(1-" << howManyDaysInMonth << "): ";
+    getline(std::cin,prompt);
+    std::cout << std::endl;
+
+    if(prompt.empty())
+    {
+        return boost::posix_time::second_clock::local_time().date().day();
+    }
+    else
+    {
+        int day;
+        std::string::size_type sz;
+        day = std::stoi(prompt,&sz);
+        if(day < 1 || day > howManyDaysInMonth)
+        {
+            std::cout << "Invalid day!" << std::endl;
+            day = boost::posix_time::second_clock::local_time().date().day();
+        }
+        return day;
+    }
+}
+
+boost::posix_time::time_duration TodoController::promptTime()
+{
+    //Get offset from start of day in hours and minute.
+    //Defaults to midnight, e.g. (0,0)
+    std::string prompt;
+    short int hours, minutes;
+    std::cout << "Please input time of day: ";
+    getline(std::cin,prompt);
+    if(prompt.empty())
+    {
+        hours = 0;
+        minutes = 0;
+    }
+    else
+    {
+        std::string::size_type sz;
+        //Get hour from input.
+        std::string::size_type seperator = prompt.find(":");
+        //If ':' exists in response string.
+        if(seperator != std::string::npos)
+        {
+            std::string hourString = prompt.substr(0,seperator);
+            hours = std::stoi(hourString,&sz);
+        }
+       else
+       {
+           hours = 0;
+        }
+        
+        //Get minute from input
+        std::string::size_type beforePM = prompt.find("M");
+        --beforePM; //Get either A or P from string.
+        if(seperator != std::string::npos && beforePM != std::string::npos)
+        {
+            std::string minuteString = prompt.substr(seperator,beforePM);
+            minutes = std::stoi(minuteString,&sz);
+        }
+        else
+        {
+            minutes = 0;
+        }
+
+        //If PM exists in the response string
+        if(prompt.find("PM") != std::string::npos)
+            hours+= 12;
+    }
+
+    return boost::posix_time::hours(hours) + boost::posix_time::minutes(minutes);
 }
