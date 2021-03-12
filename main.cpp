@@ -24,15 +24,15 @@ int main(int argc, char * argv[])
         << SimpList_VERSION_MINOR << std::endl;
     //const double inputValue = std::stod(argv[1]);
     
-    ListItem g("Hello World");
-    g.setTodoBody("good morning");
+    //ListItem g("Hello World");
+    //g.setTodoBody("good morning");
 
-    ListItemLoadWrapper wrap = ListItemLoadWrapper();
-    wrap.addItem(&g);
-    wrap.writeToFile(LISTITEM_STORE);
+    //ListItemLoadWrapper wrap = ListItemLoadWrapper();
+    //wrap.addItem(&g);
+    //wrap.writeToFile(LISTITEM_STORE);
 
     TodoController controller = TodoController();
-    controller.addToList("listitems.list");
+    //controller.addToList("listitems.list");
     controller.getLists();
 
     

@@ -103,7 +103,7 @@ std::vector<std::string> TodoController::getLists()
 }
 
 //This is too bloated and needs to be subdivided.
-void TodoController::addToList(std::string list, std::string name = "",boost::gregorian::date date = boost::gregorian::date(),std::string hourMin = "", std::string bodyText = "")
+void TodoController::addToList(std::string list, std::string name,boost::gregorian::date date,std::string hourMin, std::string bodyText)
 {
     priorityQueueTodo * listRef = this->getList(list);
 
@@ -117,7 +117,7 @@ void TodoController::addToList(std::string list, std::string name = "",boost::gr
         std::string prompt;
 
         //prompt for name if none given.
-        if(name = "")
+        if(name.empty())
         {
             //Get data from user
             std::cout << "Please input item name: ";
@@ -159,7 +159,7 @@ void TodoController::addToList(std::string list, std::string name = "",boost::gr
             }
         }
         else
-            itemBody = bodyText
+            itemBody = bodyText;
 
         
 
@@ -202,7 +202,7 @@ void TodoController::showList(std::string listName)
     this->getList(listName)->printTodo();
 }
 
-boost::posix_time::ptime TodoController::promptDate(boost::gregorian::date date = boost::gregorian::date(), std::string hourMin = "")
+boost::posix_time::ptime TodoController::promptDate(boost::gregorian::date date, std::string hourMin)
 {
     //if i need to prompt.
     if(date.is_not_a_date())
@@ -308,7 +308,7 @@ int TodoController::promptDay(int month)
 }
 
 //This is where a problem is.
-boost::posix_time::time_duration TodoController::promptTime(std::string hourMin = "")
+boost::posix_time::time_duration TodoController::promptTime(std::string hourMin)
 {
     //Get offset from start of day in hours and minute.
     //Defaults to midnight, e.g. (0,0)
