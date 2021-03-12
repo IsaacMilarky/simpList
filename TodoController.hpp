@@ -15,7 +15,8 @@ class TodoController
         std::vector<std::string> getLists();
 
         //Adds to selected list, arg is list name.
-        void addToList(std::string);
+        //Default args to toggle prompts.
+        void addToList(std::string,std::string,boost::gregorian::date,std::string,std::string);
         void editList(std::string);
 
         //Get list by name
@@ -27,7 +28,8 @@ class TodoController
     private:
         //Private methods
         //Handle getting date from prompt
-        boost::posix_time::ptime promptDate();
+        //Defualt argument to subvert text prompt.
+        boost::posix_time::ptime promptDate(boost::gregorian::date,std::string);
         //Prompt user for year to store in an int.
         //Returns current system year if no input.
         int promptYear();
@@ -38,7 +40,7 @@ class TodoController
         //Returns current system month if no input
         int promptDay(int);
         //Prompt user for time of day.
-        boost::posix_time::time_duration promptTime();
+        boost::posix_time::time_duration promptTime(std::string);
         
         //Lists are stored on heap, make sure to destruct that memory.
         std::vector<priorityQueueTodo *> lists;

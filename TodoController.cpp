@@ -103,7 +103,7 @@ std::vector<std::string> TodoController::getLists()
 }
 
 //This is too bloated and needs to be subdivided.
-void TodoController::addToList(std::string list)
+void TodoController::addToList(std::string list, std::string name = "",boost::gregorian::date date = boost::gregorian::date(),std::string hourMin = "", std::string bodyText = "")
 {
     priorityQueueTodo * listRef = this->getList(list);
 
@@ -116,35 +116,52 @@ void TodoController::addToList(std::string list)
 
         std::string prompt;
 
-        //Get data from user
-        std::cout << "Please input item name: ";
-        getline(std::cin,itemName);
-        std::cout << std::endl;
-
-        //Ask if they want to add a deadline.
-        std::cout << "Would you like to add a deadline? (y/n): ";
-        getline(std::cin, prompt);
-        std::cout << std::endl;
-
-        if(prompt.compare("y") == 0 || prompt.compare("Y") == 0)
+        //prompt for name if none given.
+        if(name = "")
         {
-            deadLine = this->promptDate();
+            //Get data from user
+            std::cout << "Please input item name: ";
+            getline(std::cin,itemName);
         }
-        //If not Y deadLine => not_a_date_time
 
-        //ask if they want an item body.
-        std::cout << "Would you like to add a body? (y/n): ";
-        getline(std::cin,prompt);
-        if(prompt.compare("y") == 0 || prompt.compare("Y") == 0)
+        if(date.is_not_a_date())
         {
-            std::cout << "Enter body: ";
-            getline(std::cin,itemBody);
+            //Ask if they want to add a deadline.
+            std::cout << "Would you like to add a deadline? (y/n): ";
+            getline(std::cin, prompt);
             std::cout << std::endl;
+
+            if(prompt.compare("y") == 0 || prompt.compare("Y") == 0)
+            {
+                deadLine = this->promptDate();
+            }   
+            //If not Y deadLine => not_a_date_time
         }
         else
         {
-            itemBody = "";
+            deadLine = this->promptDate(date,hourMin);
         }
+        
+        if(bodyText == "")
+        {
+            //ask if they want an item body.
+            std::cout << "Would you like to add a body? (y/n): ";
+            getline(std::cin,prompt);
+            if(prompt.compare("y") == 0 || prompt.compare("Y") == 0)
+            {
+                std::cout << "Enter body: ";
+                getline(std::cin,itemBody);
+                std::cout << std::endl;
+            }
+            else
+            {
+                itemBody = "";
+            }
+        }
+        else
+            itemBody = bodyText
+
+        
 
         //Add item.
         ListItem toAdd;
@@ -185,22 +202,38 @@ void TodoController::showList(std::string listName)
     this->getList(listName)->printTodo();
 }
 
-boost::posix_time::ptime TodoController::promptDate()
+boost::posix_time::ptime TodoController::promptDate(boost::gregorian::date date = boost::gregorian::date(), std::string hourMin = "")
 {
-    //Prompt for year. defaults to current year.
-    int year;
-    year = this->promptYear();
+    //if i need to prompt.
+    if(date.is_not_a_date())
+    {
+        //Prompt for year. defaults to current year.
+        int year;
+        year = this->promptYear();
     
-    //Prompt for month, defaults to current month.
-    int month;
-    month = this->promptMonth();
+        //Prompt for month, defaults to current month.
+        int month;
+        month = this->promptMonth();
             
-    //Prompt for day, defaults to current day.
-    int day;
-    day = this->promptDay(month);
+        //Prompt for day, defaults to current day.
+        int day;
+        day = this->promptDay(month);
     
-    //Prompt for hour:minute in return constructor.
-    return boost::posix_time::ptime(boost::gregorian::date(year,month,day), this->promptTime());
+        //Prompt for hour:minute in return constructor.
+        if(hourMin.compare("") == 0)
+            return boost::posix_time::ptime(boost::gregorian::date(year,month,day), this->promptTime());
+        else
+            return boost::posix_time::ptime(boost::gregorian::date(year,month,day), this->promptTime(hourMin));   
+    }
+    else
+    {
+        //Prompt for hour:minute in return constructor.
+        if(hourMin.compare("") == 0)
+            return boost::posix_time::ptime(date, this->promptTime());
+        else
+            return boost::posix_time::ptime(date, this->promptTime(hourMin));
+    }
+    
 }
 
 
@@ -275,14 +308,23 @@ int TodoController::promptDay(int month)
 }
 
 //This is where a problem is.
-boost::posix_time::time_duration TodoController::promptTime()
+boost::posix_time::time_duration TodoController::promptTime(std::string hourMin = "")
 {
     //Get offset from start of day in hours and minute.
     //Defaults to midnight, e.g. (0,0)
     std::string prompt;
     short int hours, minutes;
-    std::cout << "Please input time of day: ";
-    getline(std::cin,prompt);
+
+    if(hourMin.empty())
+    {
+        std::cout << "Please input time of day: ";
+        getline(std::cin,prompt);
+    }
+    else
+    {
+        prompt = hourMin;
+    }
+    
     if(prompt.empty())
     {
         hours = 0;
