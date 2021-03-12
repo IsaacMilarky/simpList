@@ -105,9 +105,9 @@ std::vector<std::string> TodoController::getLists()
 //This is too bloated and needs to be subdivided.
 void TodoController::addToList(std::string list)
 {
-    priorityQueueTodo * list = this->getList(list);
+    priorityQueueTodo * listRef = this->getList(list);
 
-    if(list != nullptr)
+    if(listRef != nullptr)
     {
         //Prompts for adding new list item.
         std::string itemName;
@@ -128,7 +128,6 @@ void TodoController::addToList(std::string list)
 
         if(prompt.compare("y") == 0 || prompt.compare("Y") == 0)
         {
-
             deadLine = this->promptDate();
         }
         //If not Y deadLine => not_a_date_time
@@ -160,7 +159,7 @@ void TodoController::addToList(std::string list)
         if(itemBody.compare("") != 0)
             toAdd.setTodoBody(itemBody);
 
-        list->addTodoItem(&toAdd,1.0);
+        listRef->addTodoItem(&toAdd,1.0);
     }
     else
         std::cout << "List Entered was not found." << std::endl;
@@ -172,7 +171,7 @@ priorityQueueTodo * TodoController::getList(std::string listName)
     for(unsigned int iter = 0; iter < lists.size(); ++iter)
     {
         //Test each list
-        if(lists.at(iter)->getName().compare(list) == 0)
+        if(lists.at(iter)->getName().compare(listName) == 0)
         {
             return lists.at(iter);
         }
@@ -193,7 +192,7 @@ boost::posix_time::ptime TodoController::promptDate()
             
     //Prompt for day, defaults to current day.
     int day;
-    day = this->promptday(month);
+    day = this->promptDay(month);
     
     //Prompt for hour:minute in return constructor.
     return boost::posix_time::ptime(boost::gregorian::date(year,month,day), this->promptTime());
@@ -213,6 +212,7 @@ int TodoController::promptYear()
     {
         std::string::size_type sz; //alias of size_t.
         return std::stoi(prompt,&sz); //String to int for prompt.
+    }
 }
 
 int TodoController::promptMonth()
@@ -269,6 +269,7 @@ int TodoController::promptDay(int month)
     }
 }
 
+//This is where a problem is.
 boost::posix_time::time_duration TodoController::promptTime()
 {
     //Get offset from start of day in hours and minute.
@@ -298,13 +299,14 @@ boost::posix_time::time_duration TodoController::promptTime()
            hours = 0;
         }
         
+        
         //Get minute from input
         std::string::size_type beforePM = prompt.find("M");
         --beforePM; //Get either A or P from string.
         if(seperator != std::string::npos && beforePM != std::string::npos)
         {
-            std::string minuteString = prompt.substr(seperator,beforePM);
-            minutes = std::stoi(minuteString,&sz);
+            std::string minuteString = prompt.substr(seperator + 1,beforePM - 1);
+            minutes = std::stoi(minuteString,nullptr,10);
         }
         else
         {

@@ -14,6 +14,7 @@ SET(CMAKE_CXX_STANDARD_REQUIRED True)
 
 #add_executable(SimpList main.cpp)
 
+#Remove to remove debug symbols.
 set(CMAKE_BUILD_TYPE Debug)
 #Hmm, today I will try to compile a boost library (clueless)
 set(Boost_USE_STATIC_LIBS OFF)

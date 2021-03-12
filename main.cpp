@@ -13,7 +13,7 @@ const std::string LISTITEM_STORE = "listitems.list";
 /*
     Should have not stupid syntax.
     Something like ./Simplist -a listItem -d DD-MM-YYYY
-    
+
 */
 
 
@@ -24,6 +24,12 @@ int main(int argc, char * argv[])
         << SimpList_VERSION_MINOR << std::endl;
     //const double inputValue = std::stod(argv[1]);
     
+    ListItem g("Hello World");
+    g.setTodoBody("good morning");
+
+    ListItemLoadWrapper wrap = ListItemLoadWrapper();
+    wrap.addItem(&g);
+    wrap.writeToFile(LISTITEM_STORE);
 
     TodoController controller = TodoController();
     controller.addToList("listitems.list");
