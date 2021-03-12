@@ -21,6 +21,11 @@ class TodoController
         //Get list by name
         priorityQueueTodo * getList(std::string);
 
+        //Prints items in lists
+        void showList(std::string);
+    
+    private:
+        //Private methods
         //Handle getting date from prompt
         boost::posix_time::ptime promptDate();
         //Prompt user for year to store in an int.
@@ -34,11 +39,9 @@ class TodoController
         int promptDay(int);
         //Prompt user for time of day.
         boost::posix_time::time_duration promptTime();
-        //Prints items in lists
-        void showList(std::string);
-    
-    private:
+        
         //Lists are stored on heap, make sure to destruct that memory.
         std::vector<priorityQueueTodo *> lists;
+
 
 };

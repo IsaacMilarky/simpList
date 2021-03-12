@@ -180,6 +180,11 @@ priorityQueueTodo * TodoController::getList(std::string listName)
     return nullptr;
 }
 
+void TodoController::showList(std::string listName)
+{
+    this->getList(listName)->printTodo();
+}
+
 boost::posix_time::ptime TodoController::promptDate()
 {
     //Prompt for year. defaults to current year.
@@ -299,7 +304,7 @@ boost::posix_time::time_duration TodoController::promptTime()
            hours = 0;
         }
         
-        
+
         //Get minute from input
         std::string::size_type beforePM = prompt.find("M");
         --beforePM; //Get either A or P from string.
