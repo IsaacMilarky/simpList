@@ -21,6 +21,7 @@ void ListItemLoadWrapper::loadFromFile(std::string filename)
     boost::archive::text_iarchive ia(ifs);
 
     ia >> *this;
+    ifs.close();
 }
 
 void ListItemLoadWrapper::writeToFile(std::string filename)
@@ -33,4 +34,5 @@ void ListItemLoadWrapper::writeToFile(std::string filename)
         //Dereference self and write.
         oa << *this;
     }
+    ofs.close();
 }

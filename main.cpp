@@ -32,7 +32,7 @@ int main(int argc, char * argv[])
     //wrap.writeToFile(LISTITEM_STORE);
 
     TodoController controller = TodoController();
-    //controller.addToList("listitems.list");
+    controller.addToList("listitems.list");
     controller.getLists();
 
     

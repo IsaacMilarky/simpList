@@ -42,7 +42,7 @@ TodoController::TodoController()
         //Load from file, This is tricky as hell beware.
         ListItemLoadWrapper loadFromDrive = ListItemLoadWrapper();
         //std::cout << listFiles.at(iter) << std::endl;
-        loadFromDrive.loadFromFile(listFiles.at(iter));
+        loadFromDrive.loadFromFile("listitems.list");
 
         //Load Each item into a PQ.
         priorityQueueTodo * newList = new priorityQueueTodo(listFiles.at(iter));
@@ -129,7 +129,6 @@ void TodoController::addToList(std::string list, std::string name,boost::gregori
             //Ask if they want to add a deadline.
             std::cout << "Would you like to add a deadline? (y/n): ";
             getline(std::cin, prompt);
-            std::cout << std::endl;
 
             if(prompt.compare("y") == 0 || prompt.compare("Y") == 0)
             {
