@@ -17,6 +17,7 @@ class TodoController
         //Adds to selected list, arg is list name.
         //Default args to toggle prompts.
         void addToList(std::string,std::string = "",boost::gregorian::date = boost::gregorian::date(),std::string = "",std::string = "");
+        //edit will remove requested list item string and call AddToList.
         void editList(std::string);
 
         //Get list by name

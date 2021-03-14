@@ -75,8 +75,10 @@ class ListItem
 			//Now for the hard ones.
 			ar & dateCreated;
 
-			if(!deadLine.is_not_a_date_time())
-				ar & deadLine;
+			//if(!deadLine.is_not_a_date_time())
+			//	ar & deadLine;
+			std::cout << deadLine << std::endl;
+			ar & deadLine;
 		}		
 
 		//We want to store times as a simple numeral if possible.
