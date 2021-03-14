@@ -18,10 +18,13 @@ class TodoController
         //Default args to toggle prompts.
         void addToList(std::string,std::string = "",boost::gregorian::date = boost::gregorian::date(),std::string = "",std::string = "");
         //edit will remove requested list item string and call AddToList.
-        void editList(std::string);
+        //No default is present for ListItem's name on this method.
+        void editList(std::string,std::string,boost::gregorian::date = boost::gregorian::date(),std::string = "",std::string = "");
 
         //Get list by name
         priorityQueueTodo * getList(std::string);
+
+        void deleteList(std::string);
 
         //Prints items in lists
         void showList(std::string);

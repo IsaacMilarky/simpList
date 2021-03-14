@@ -77,7 +77,7 @@ class ListItem
 
 			//if(!deadLine.is_not_a_date_time())
 			//	ar & deadLine;
-			std::cout << deadLine << std::endl;
+			//std::cout << deadLine << std::endl;
 			ar & deadLine;
 		}		
 

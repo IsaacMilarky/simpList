@@ -103,7 +103,7 @@ void priorityQueueTodo::printTodo()
 		std::cout << "--------------------------------------------------------\n";
 		iter->key->print();
 		std::cout << iter->priority << "\n";
-		std::cout << "--------------------------------------------------------\n";
+		//std::cout << "--------------------------------------------------------\n";
 	}
 
 	return;
@@ -201,6 +201,22 @@ Node* priorityQueueTodo::getRear()
 	return rear;
 }
 
+//Get reference starting at head using string
+ListItem* priorityQueueTodo::getItem(std::string itemName)
+{
+	//Iterate through PQ
+	for(Node* iter = head; iter; iter = iter->next)
+	{
+		//If iter's ListItem name == the arg.
+		if(iter->key->getTodoName().compare(itemName) == 0)
+		{
+			return iter->key;
+		}
+	}
+
+	//Not found.
+	return nullptr;
+}
 
 //Private
 //TODO: this is bubble sort but should be something better.

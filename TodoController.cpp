@@ -53,6 +53,7 @@ TodoController::TodoController()
             newList->addTodoItem(&loadFromDrive.wrapArray.at(item),1.0);
         }
 
+        newList->prioritizeByDateCreated();
         //Add to class
         lists.push_back(newList);
     }
@@ -60,8 +61,6 @@ TodoController::TodoController()
 
 }
 
-///TODO:Saving list body corrupts data, find out why.
-//Seems to have to do with listWrapper being reset. Use it differantly.
 TodoController::~TodoController()
 {
     //Iterate and save each list.
@@ -123,6 +122,10 @@ void TodoController::addToList(std::string list, std::string name,boost::gregori
             std::cout << "Please input item name: ";
             getline(std::cin,itemName);
         }
+        else
+        {
+            itemName = name;
+        }
 
         if(date.is_not_a_date())
         {
@@ -176,6 +179,75 @@ void TodoController::addToList(std::string list, std::string name,boost::gregori
             toAdd.setTodoBody(itemBody);
 
         listRef->addTodoItem(&toAdd,1.0);
+        listRef->prioritizeByDateCreated();
+    }
+    else
+        std::cout << "List Entered was not found." << std::endl;
+}
+
+void TodoController::editList(std::string list, std::string name,boost::gregorian::date date,std::string hourMin, std::string bodyText)
+{
+    priorityQueueTodo * listRef = this->getList(list);
+    ListItem * itemRef = listRef->getItem(name);
+    if(listRef != nullptr || itemRef != nullptr)
+    {
+        std::string itemBody;
+
+        boost::posix_time::ptime deadLine;
+        std::string prompt;
+
+        //Get data from user
+        std::cout << "Please input item name (blank for no change): ";
+        getline(std::cin,prompt);
+
+        //If response is recorded, change name of reference. 
+        if(!prompt.empty())
+        {
+            itemRef->setTodoName(prompt);
+        }
+
+        if(date.is_not_a_date())
+        {
+            //Ask if they want to add a deadline.
+            std::cout << "Would you like to change a deadline? (y/n): ";
+            getline(std::cin, prompt);
+
+            if(prompt.compare("y") == 0 || prompt.compare("Y") == 0)
+            {
+                deadLine = this->promptDate();
+            }   
+            //If not Y deadLine => not_a_date_time
+        }
+        else
+        {
+            deadLine = this->promptDate(date,hourMin);
+        }
+
+        //Update heap reference.
+        itemRef->setDeadLine(deadLine);
+
+        if(bodyText == "")
+        {
+            //ask if they want an item body.
+            std::cout << "Would you like to change the body? (y/n): ";
+            getline(std::cin,prompt);
+            if(prompt.compare("y") == 0 || prompt.compare("Y") == 0)
+            {
+                std::cout << "Enter body: ";
+                getline(std::cin,itemBody);
+                std::cout << std::endl;
+            }
+            else
+            {
+                //Quick default fix.
+                itemBody = itemRef->getTodoBody();
+            }
+        }
+        else
+            itemBody = bodyText;
+        
+        //Update ref.
+        itemRef->setTodoBody(itemBody);
     }
     else
         std::cout << "List Entered was not found." << std::endl;
@@ -196,11 +268,34 @@ priorityQueueTodo * TodoController::getList(std::string listName)
     return nullptr;
 }
 
+//O(n)
+void TodoController::deleteList(std::string listName)
+{
+    //Find list with name list
+    for(unsigned int iter = 0; iter < lists.size(); ++iter)
+    {
+        //Test each list
+        if(lists.at(iter)->getName().compare(listName) == 0)
+        {
+            priorityQueueTodo * toDelete = lists.at(iter);
+            //Remove from vector by index.
+            //Erase lists[iter]
+            lists.erase(lists.begin() + iter);
+            delete toDelete;
+            //Deletion found. exit.
+            return;
+        }
+    }
+
+    std::cout << "No list found to remove" << std::endl;
+}
+
 void TodoController::showList(std::string listName)
 {
     this->getList(listName)->printTodo();
 }
 
+///PRIVATE
 boost::posix_time::ptime TodoController::promptDate(boost::gregorian::date date, std::string hourMin)
 {
     //if i need to prompt.
