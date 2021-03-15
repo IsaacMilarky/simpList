@@ -14,6 +14,9 @@ const std::string LISTITEM_STORE = "listitems.list";
     Should have not stupid syntax.
     Something like ./Simplist -a listItem -d DD-MM-YYYY
 
+    For reminders:
+        some command like ./Simplist -U should be called by the system to check deadlines.
+
 */
 
 
