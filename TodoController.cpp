@@ -290,6 +290,12 @@ void TodoController::deleteList(std::string listName)
     std::cout << "No list found to remove" << std::endl;
 }
 
+void TodoController::deleteListItem(std::string list, std::string itemName)
+{
+    priorityQueueTodo * listRef = this->getList(list);
+    listRef->deleteItem(itemName);
+}
+
 void TodoController::showList(std::string listName)
 {
     this->getList(listName)->printTodo();

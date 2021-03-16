@@ -26,6 +26,8 @@ class TodoController
 
         void deleteList(std::string);
 
+        void deleteListItem(std::string,std::string);
+
         //Prints items in lists
         void showList(std::string);
     

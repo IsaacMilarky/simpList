@@ -218,6 +218,39 @@ ListItem* priorityQueueTodo::getItem(std::string itemName)
 	return nullptr;
 }
 
+void priorityQueueTodo::deleteItem(std::string itemName)
+{
+	//Special case for head.
+	if(head->key->getTodoName().compare(itemName) == 0)
+	{
+		Node * clobberinTime = head;
+		head = head->next;
+		delete clobberinTime->key;
+		delete clobberinTime;
+		return;
+	}
+
+	//Case for 1..n
+	for(Node* iter = head; iter->next; iter = iter->next)
+	{
+		//std::cout << "Name in list: " << iter->next->key->getTodoName() << " Name looking for: " << itemName << std::endl;
+		//If the one after this reference is the one we are looking for.
+		if(iter->next->key->getTodoName().compare(itemName) == 0)
+		{
+			//Ref to what needs to be deleted.
+			Node * clobberinTime = iter->next;
+			//Make it skip over what we want to delete.
+			iter->next = iter->next->next;
+			//clobberinTime->print();
+			//free the memory.
+			delete clobberinTime->key;
+			delete clobberinTime;
+			return;
+		}
+	}
+	std::cout << "No item named " << itemName << " found." << std::endl;
+}
+
 //Private
 //TODO: this is bubble sort but should be something better.
 // Currently does not work.

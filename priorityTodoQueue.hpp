@@ -50,6 +50,8 @@ class priorityQueueTodo
 
 		//Get reference to some listItem
 		ListItem* getItem(std::string);
+		//Delete listItem from list in smooth way.
+		void deleteItem(std::string);
 
 	private:
 		void sort();
