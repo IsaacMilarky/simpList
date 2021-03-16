@@ -30,6 +30,8 @@ class TodoController
 
         //Prints items in lists
         void showList(std::string);
+
+        void checkDeadLines();
     
     private:
         //Private methods

@@ -37,9 +37,8 @@ int main(int argc, char * argv[])
     TodoController controller = TodoController();
     std::cout << std::string(argv[1]) << std::endl;
     controller.addToList("listitems.list",std::string(argv[1]));
-    controller.editList("listitems.list","Hello World");
-    controller.deleteListItem("listitems.list","Hello World");
     controller.showList("listitems.list");
+    controller.checkDeadLines();
     //controller.deleteList("listitems.list");
 
     return 0;

@@ -1,4 +1,5 @@
 #include "TodoController.hpp"
+#include <cmath>
 
 bool hasEnding(std::string const &fullString, std::string const &ending)
 {
@@ -299,6 +300,47 @@ void TodoController::deleteListItem(std::string list, std::string itemName)
 void TodoController::showList(std::string listName)
 {
     this->getList(listName)->printTodo();
+}
+
+//O(n^2) fix in the future.
+void TodoController::checkDeadLines()
+{
+    boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+    //Vector to hold data to print.
+    std::vector<ListItem *> toPrint;
+    //Check deadlines in all lists.
+    //Notify if deadline is less than five minutes away.
+    for(unsigned int iter = 0; iter < lists.size(); ++iter)
+    {
+        //use node to iterate through list.
+        Node * headRef = lists.at(iter)->getHead();
+
+        for(Node * iter = headRef; iter; iter = iter->next)
+        {
+            //This scope is the reference for every ListItem
+            ListItem * itemRef = iter->key;
+            boost::posix_time::ptime stopDate = itemRef->getDeadLine();
+            //If deadLine not null
+            if(!stopDate.is_not_a_date_time())
+            {
+                //Time elapsed
+                boost::posix_time::time_duration diff = stopDate - now;
+                if(diff.total_seconds() <= 120)
+                {
+                    toPrint.push_back(itemRef);
+                }
+            }
+        }
+    }
+
+    if(!toPrint.empty())
+        std::cout << toPrint.size() << " events are due in the near future!\n" << std::endl;
+    
+    for(unsigned int iter = 0; iter < toPrint.size(); iter++)
+    {
+        toPrint.at(iter)->print();
+        std::cout << "---------------------------------------" << std::endl;
+    }
 }
 
 ///PRIVATE
