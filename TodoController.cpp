@@ -43,13 +43,10 @@ TodoController::TodoController()
         //Load from file, This is tricky as hell beware.
         ListItemLoadWrapper loadFromDrive = ListItemLoadWrapper();
         //std::cout << listFiles.at(iter) << std::endl;
-        loadFromDrive.loadFromFile(listFiles.at(iter));
+        loadFromDrive.loadFromFile("listitems.list");
 
-        //Strip the file extension.
-        std::size_t iPos = listFiles.at(iter).find(".");
-        //std::cout << listFiles.at(iter).substr(0,iPos - 1) << std::endl;
-        //Load Each item into a PQ. Substring is the string without the .list.
-        priorityQueueTodo * newList = new priorityQueueTodo(listFiles.at(iter).substr(0,iPos - 1));
+        //Load Each item into a PQ.
+        priorityQueueTodo * newList = new priorityQueueTodo(listFiles.at(iter));
 
         //Add each loaded listitem into the pq by address.
         for(int item = 0; item < loadFromDrive.wrapArray.size(); item++)
@@ -57,7 +54,7 @@ TodoController::TodoController()
             newList->addTodoItem(&loadFromDrive.wrapArray.at(item),1.0);
         }
 
-        //newList->prioritizeByDateCreated();
+        newList->prioritizeByDateCreated();
         //Add to class
         lists.push_back(newList);
     }
@@ -80,7 +77,7 @@ TodoController::~TodoController()
             head = lists.at(iter)->popHead();
         }
 
-        saveToDrive.writeToFile(lists.at(iter)->getName() + ".list");
+        saveToDrive.writeToFile(lists.at(iter)->getName());
         //delete data
         delete lists.at(iter);
     }
@@ -95,20 +92,14 @@ std::vector<std::string> TodoController::getLists()
     for(unsigned int iter = 0; iter < lists.size(); ++iter)
     {
         toReturn.push_back(lists.at(iter)->getName());
-    }
 
-    return toReturn;
-}
-
-void TodoController::printLists()
-{
-    for(unsigned int iter = 0; iter < lists.size(); ++iter)
-    {
         //List Title.
         std::cout << "List: " << lists.at(iter)->getName() << std::endl;
         //print
         lists.at(iter)->printTodo();
     }
+
+    return toReturn;
 }
 
 void TodoController::addList(std::string listName)

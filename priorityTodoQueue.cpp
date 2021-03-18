@@ -181,11 +181,7 @@ ListItem* priorityQueueTodo::popHead()
 	ListItem * toReturn;
 	if(head)
 	{
-		//std::cout << head << std::endl;
-		if(head->key)
-			toReturn = head->key;
-		else
-			toReturn = NULL;
+		toReturn = head->key;
 		//std::cout << head->key->getTodoBody() << std::endl;
 		//toReturn->print();
 	}
@@ -193,11 +189,10 @@ ListItem* priorityQueueTodo::popHead()
 		toReturn = NULL;
 	//Delete head.
 	Node * clobberinTime = head;
-	if(head->next)
+	if(head)
 		head = head->next;
 
-	if(clobberinTime)
-		delete clobberinTime;
+	delete clobberinTime;
 	return toReturn;
 }
 
