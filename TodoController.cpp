@@ -57,7 +57,7 @@ TodoController::TodoController()
             newList->addTodoItem(&loadFromDrive.wrapArray.at(item),1.0);
         }
 
-        newList->prioritizeByDateCreated();
+        //newList->prioritizeByDateCreated();
         //Add to class
         lists.push_back(newList);
     }
