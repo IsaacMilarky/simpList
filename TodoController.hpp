@@ -14,6 +14,7 @@ class TodoController
 
         std::vector<std::string> getLists();
 
+        void addList(std::string);
         //Adds to selected list, arg is list name.
         //Default args to toggle prompts.
         void addToList(std::string,std::string = "",boost::gregorian::date = boost::gregorian::date(),std::string = "",std::string = "");

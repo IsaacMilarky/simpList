@@ -102,6 +102,12 @@ std::vector<std::string> TodoController::getLists()
     return toReturn;
 }
 
+void TodoController::addList(std::string listName)
+{
+    priorityQueueTodo * newList = new priorityQueueTodo(listName);
+    lists.push_back(newList);
+}
+
 //This is too bloated and needs to be subdivided.
 void TodoController::addToList(std::string list, std::string name,boost::gregorian::date date,std::string hourMin, std::string bodyText)
 {

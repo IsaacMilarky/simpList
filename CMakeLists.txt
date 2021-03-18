@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 #Set the project name
 project(SimpList VERSION 0.01)
+enable_testing()
 
 #This part was not explained well in the tutorial.
 configure_file(
@@ -26,7 +27,10 @@ if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     add_executable(SimpList ListItem.cpp priorityTodoQueue.cpp ListItemLoadWrapper.cpp TodoController.cpp main.cpp)
     target_link_libraries(SimpList ${Boost_LIBRARIES})
+    add_executable(test_exec test_simp_list.cpp)
+    add_test(NAME simpTest COMMAND test_exec)
 endif()
 
 target_include_directories(SimpList PUBLIC
                             "{PROJECT BINARY_DIR}")
+
