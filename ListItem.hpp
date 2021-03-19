@@ -49,7 +49,8 @@ class ListItem
 		void setTodoBody(std::string);
 		std::string getTodoBody();
 
-		void print();
+		//Returns for testing purposes.
+		std::string print();
 		
 
 	protected:

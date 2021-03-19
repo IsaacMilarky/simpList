@@ -131,7 +131,7 @@ std::string ListItem::getTodoBody()
 	return itemBody;
 }
 
-void ListItem::print()
+std::string ListItem::print()
 {
 	//TODO: just make it print out members that exist.
 	/*
@@ -140,13 +140,25 @@ void ListItem::print()
 		std::string itemName;
 	*/
 
+	std::string toPrint = "";
 	std::cout << "Title: " << itemName << "\n";
+	toPrint += "Title" + itemName + "\n";
+
 	//Ternery outputs string if it isn't empty, otherwise gives N/A
 	std::string bodyToPrint = itemBody.compare("") != 0 ? "N/A" : itemBody;
-	std::cout << "Body: " << itemBody << "\n";
+
+	std::cout << "Body: " << bodyToPrint << "\n";
+	toPrint += "Body: " + bodyToPrint + "\n";
+
 	std::cout << "Item Created on: " << dateCreated << "\n";
+	toPrint += "Item Created on: " + to_simple_string(dateCreated) + "\n";
 	
 	if(!deadLine.is_not_a_date_time())
+	{
 		std::cout << "Item should be completed on: " << deadLine << "\n";
+		toPrint += "Item should be completed on: " + to_simple_string(deadLine) + "\n";
+	}
+
+	return toPrint;
 }
 

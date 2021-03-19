@@ -56,7 +56,7 @@ TodoController::TodoController()
             newList->addTodoItem(&loadFromDrive.wrapArray.at(item),1.0);
         }
 
-        newList->prioritizeByDateCreated();
+        //newList->prioritizeByDateCreated();
         //Add to class
         lists.push_back(newList);
     }
@@ -99,15 +99,19 @@ std::vector<std::string> TodoController::getLists()
     return toReturn;
 }
 
-void TodoController::showLists()
+std::string TodoController::showLists()
 {
+    std::string toPrint = "";
     for(unsigned int iter = 0; iter < lists.size(); ++iter)
     {
         //List Title.
-        std::cout << "List: " << lists.at(iter)->getName() << std::endl;
+        toPrint += "List: " + lists.at(iter)->getName() + "\n";
+        std::cout << "List: " << lists.at(iter)->getName() << "\n";
         //print
-        lists.at(iter)->printTodo();
+        toPrint += lists.at(iter)->printTodo();
     }
+
+    return toPrint;
 }
 
 void TodoController::addList(std::string listName)
@@ -311,9 +315,22 @@ void TodoController::deleteListItem(std::string list, std::string itemName)
     listRef->deleteItem(itemName);
 }
 
-void TodoController::showList(std::string listName)
+std::string TodoController::showList(std::string listName)
 {
-    this->getList(listName)->printTodo();
+    //this->getList(listName)->printTodo();
+    //Check for empty
+    std::string toPrint = "";
+    priorityQueueTodo * someList = this->getList(listName);
+
+    if(someList == nullptr)
+        toPrint += someList->printTodo();
+    else
+    {
+        std::cout << "List Not Found!" << std::endl;
+        toPrint += "List Not Found!\n";
+    }
+
+    return toPrint;
 }
 
 //O(n^2) fix in the future.

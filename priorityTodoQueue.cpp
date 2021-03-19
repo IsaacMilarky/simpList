@@ -94,19 +94,24 @@ bool priorityQueueTodo::addTodoItem(ListItem * listItemPtr,float priority)
 }
 
 //Just prints what's in the class.
-void priorityQueueTodo::printTodo()
+std::string priorityQueueTodo::printTodo()
 {
 	Node * iter;
-
+	std::string toPrint = "";
 	for(iter = head; iter; iter = iter->next)
 	{
 		std::cout << "--------------------------------------------------------\n";
-		iter->key->print();
+		toPrint += "--------------------------------------------------------\n";
+
+		toPrint += iter->key->print();
+
 		std::cout << iter->priority << "\n";
+		toPrint += iter->priority;
+		
 		//std::cout << "--------------------------------------------------------\n";
 	}
 
-	return;
+	return toPrint;
 }
 
 void priorityQueueTodo::prioritizeByDeadLine()

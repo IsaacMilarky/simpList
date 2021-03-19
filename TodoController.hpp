@@ -13,7 +13,7 @@ class TodoController
         ~TodoController();
 
         std::vector<std::string> getLists();
-        void showLists();
+        std::string showLists();
 
         void addList(std::string);
         //Adds to selected list, arg is list name.
@@ -31,7 +31,8 @@ class TodoController
         void deleteListItem(std::string,std::string);
 
         //Prints items in lists
-        void showList(std::string);
+        //Returns string for tests.
+        std::string showList(std::string);
 
         void checkDeadLines();
     

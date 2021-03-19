@@ -30,7 +30,7 @@ class priorityQueueTodo
 		~priorityQueueTodo();
 		//arg needs to be dynamic
 		bool addTodoItem(ListItem*,float);
-		void printTodo();
+		std::string printTodo();
 		void prioritizeByDeadLine();
 		void prioritizeByDateCreated();
 
