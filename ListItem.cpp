@@ -133,7 +133,6 @@ std::string ListItem::getTodoBody()
 
 std::string ListItem::print()
 {
-	//TODO: just make it print out members that exist.
 	/*
 		std::time_t dateCreated;
 		std::time_t * deadLine; //ssh its fine
@@ -145,7 +144,7 @@ std::string ListItem::print()
 	toPrint += "Title" + itemName + "\n";
 
 	//Ternery outputs string if it isn't empty, otherwise gives N/A
-	std::string bodyToPrint = itemBody.compare("") != 0 ? "N/A" : itemBody;
+	std::string bodyToPrint = itemBody.compare("") == 0 ? "N/A" : itemBody;
 
 	std::cout << "Body: " << bodyToPrint << "\n";
 	toPrint += "Body: " + bodyToPrint + "\n";

@@ -35,9 +35,10 @@ int main(int argc, char * argv[])
     wrap.writeToFile(LISTITEM_STORE);
 
     TodoController controller = TodoController();
-    std::cout << std::string(argv[1]) << std::endl;
-    controller.addToList("listitems.list",std::string(argv[1]));
-    controller.showList("listitems.list");
+    //std::cout << std::string(argv[1]) << std::endl;
+    controller.addToList("listitems","item");
+    controller.showList("listitems");
+    //controller.deleteListItem("listitems","item")
     controller.checkDeadLines();
     //controller.deleteList("listitems.list");
 

@@ -197,6 +197,7 @@ void TodoController::addToList(std::string list, std::string name,boost::gregori
         if(itemBody.compare("") != 0)
             toAdd.setTodoBody(itemBody);
 
+        toAdd.print();
         listRef->addTodoItem(&toAdd,1.0);
         listRef->prioritizeByDateCreated();
     }
@@ -290,6 +291,25 @@ priorityQueueTodo * TodoController::getList(std::string listName)
 //O(n)
 void TodoController::deleteList(std::string listName)
 {
+
+    boost::filesystem::path p(".");
+
+    boost::filesystem::directory_iterator end_itr;
+
+    //cycle through directory.
+    for(boost::filesystem::directory_iterator itr(p); itr != end_itr; ++itr)
+    {
+        std::string current_file = itr->path().string();
+        //If it's not a directory, list it. remove this check to also list dirs
+        //Also checks if filename contains the listName _somewhere_ in it.
+        if(boost::filesystem::is_regular_file(itr->path()) 
+            && hasEnding(current_file,".list") 
+            && current_file.find(listName) != std::string::npos)
+        {
+            boost::filesystem::remove(itr->path());
+        }
+    }
+
     //Find list with name list
     for(unsigned int iter = 0; iter < lists.size(); ++iter)
     {
@@ -322,7 +342,9 @@ std::string TodoController::showList(std::string listName)
     std::string toPrint = "";
     priorityQueueTodo * someList = this->getList(listName);
 
-    if(someList == nullptr)
+    toPrint += someList->getName() + '\n';
+
+    if(someList != nullptr)
         toPrint += someList->printTodo();
     else
     {
