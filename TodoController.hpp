@@ -13,6 +13,7 @@ class TodoController
         ~TodoController();
 
         std::vector<std::string> getLists();
+        void showLists();
 
         void addList(std::string);
         //Adds to selected list, arg is list name.

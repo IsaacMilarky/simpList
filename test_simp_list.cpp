@@ -8,9 +8,31 @@
 #include <iostream>
 #include <string>
 
-BOOST_AUTO_TEST_CASE(first_test)
+//Where to save listItems
+const std::string LISTITEM_STORE = "listitems.list";
+
+
+BOOST_AUTO_TEST_CASE(test_list_create)
 {
-    int i = 1;
-    BOOST_TEST(i);
-    BOOST_TEST(i == 2);
+    BOOST_TEST_MESSAGE("running test create list");
+    ListItem g("Hello World");
+    g.setTodoBody("good morning");
+
+    ListItemLoadWrapper wrap = ListItemLoadWrapper();
+    wrap.addItem(&g);
+    std::string listName = "readWriteExample";
+    std::string fileName = listName + ".list";
+    wrap.writeToFile(fileName);
+
+    TodoController controller = TodoController();
+    std::vector<std::string> controlLists = controller.getLists();
+
+    bool contains = false;
+    for(unsigned int iter = 0; iter < controlLists.size(); ++iter)
+    {
+        if(controlLists.at(iter) == listName)
+            contains = !contains;
+    }
+
+    BOOST_TEST(contains);
 }
