@@ -27,20 +27,18 @@ int main(int argc, char * argv[])
         << SimpList_VERSION_MINOR << std::endl;
     //const double inputValue = std::stod(argv[1]);
     
-    ListItem g("Hello World");
-    g.setTodoBody("good morning");
+    TodoController mainController = TodoController();
 
-    ListItemLoadWrapper wrap = ListItemLoadWrapper();
-    wrap.addItem(&g);
-    wrap.writeToFile(LISTITEM_STORE);
-
-    TodoController controller = TodoController();
-    //std::cout << std::string(argv[1]) << std::endl;
-    controller.addToList("listitems","item");
-    controller.showList("listitems");
-    //controller.deleteListItem("listitems","item")
-    controller.checkDeadLines();
-    //controller.deleteList("listitems.list");
+    /*
+    Main entrance to the cli.
+    First argument of interface is the operation to perform.
+    Format:
+        SimpList create [listName]
+    Operations:
+        create - creat list
+        
+        
+    */
 
     return 0;
 }

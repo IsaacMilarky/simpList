@@ -140,7 +140,7 @@ BOOST_AUTO_TEST_CASE(test_add_to_empty_list)
 
     //std::cout << "Failure\n";
     //controller.showLists();
-    controller.showList("emptyTest");
+    BOOST_TEST(controller.showList("emptyTest").find("NewInEmpty") != std::string::npos);
     std::cout << "-----------------------TEST END------------------\n";
 }
 
@@ -152,6 +152,47 @@ BOOST_AUTO_TEST_CASE(test_edit_list_item)
     boost::gregorian::date dead(2002,2,10);
     controller.editList("emptyTest","NewInEmpty",dead,"4:00AM","AllArgs");
 
-    controller.showList("emptyTest");
+    //Make sure time is now differant in output.
+    BOOST_TEST(controller.showList("emptyTest").find("3:00PM") == std::string::npos);
+    std::cout << "-----------------------TEST END------------------\n";
+}
+
+const static unsigned int LIST_LOAD_SIZE = 50;
+const static std::string LIST_FILE_LOAD = "exampleLoadTest.list";
+//Wrapper tests.
+BOOST_AUTO_TEST_CASE(test_heavy_wrapper_load)
+{
+    std::cout << "-----------------------STARTING TEST------------------\n";
+
+    std::vector<ListItem> verifyCopies;
+
+    {
+        ListItemLoadWrapper wrapper = ListItemLoadWrapper();
+    
+        for(unsigned int iter = 0; iter < LIST_LOAD_SIZE; ++iter)
+        {
+            //Create Object.
+            ListItem toAdd = ListItem("Example item " + (char)('0' + iter));
+            toAdd.setTodoBody("Standard body");
+
+            //Push object to be stored into two differant vectors.
+            wrapper.addItem(&toAdd);
+            verifyCopies.push_back(toAdd);
+        }
+
+        //Pickle the archive
+        wrapper.writeToFile(LIST_FILE_LOAD);
+    }
+
+    ListItemLoadWrapper loader = ListItemLoadWrapper();
+    loader.loadFromFile(LIST_FILE_LOAD);
+
+    //Load and compare loaded vector to pre loaded vector.
+    for(unsigned int iter = 0; iter < loader.wrapArray.size(); ++iter)
+    {
+        std::string loadName = loader.wrapArray.at(iter).getTodoName();
+        BOOST_TEST(loadName == verifyCopies.at(iter).getTodoName());
+    }
+
     std::cout << "-----------------------TEST END------------------\n";
 }
