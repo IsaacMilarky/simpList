@@ -40,6 +40,13 @@ int main(int argc, char * argv[])
         
     */
 
+    std::string operation = std::string(argv[1]);
+
+    if(operation == "create")
+    {
+        std::cout << "create operation!\n";
+    }
+
     return 0;
 }
 
