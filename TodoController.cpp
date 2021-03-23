@@ -15,6 +15,8 @@ bool hasEnding(std::string const &fullString, std::string const &ending)
 
 TodoController::TodoController()
 {
+    //Prompts are true by default.
+    this->prompts = true;
     //Load all .list Items from file.
     std::vector<std::string> listFiles;
 
@@ -134,19 +136,23 @@ void TodoController::addToList(std::string list, std::string name,boost::gregori
 
         std::string prompt;
 
-        //prompt for name if none given.
-        if(name.empty())
+        //prompt for name if none given and prompts are on.
+        if(name.empty() && this->prompts)
         {
             //Get data from user
             std::cout << "Please input item name: ";
             getline(std::cin,itemName);
+        }
+        else if(name.empty())
+        {
+            itemName = "No name given!";
         }
         else
         {
             itemName = name;
         }
 
-        if(date.is_not_a_date())
+        if(date.is_not_a_date() && this->prompts)
         {
             //Ask if they want to add a deadline.
             std::cout << "Would you like to add a deadline? (y/n): ";
@@ -158,12 +164,13 @@ void TodoController::addToList(std::string list, std::string name,boost::gregori
             }   
             //If not Y deadLine => not_a_date_time
         }
-        else
+        else if (!date.is_not_a_date())
         {
             deadLine = this->promptDate(date,hourMin);
         }
+        //In implicit case deadline => not_a_date_time,
         
-        if(bodyText == "")
+        if(bodyText == "" && this->prompts)
         {
             //ask if they want an item body.
             std::cout << "Would you like to add a body? (y/n): ";
@@ -178,6 +185,11 @@ void TodoController::addToList(std::string list, std::string name,boost::gregori
             {
                 itemBody = "";
             }
+        }
+        else if (bodyText == "")
+        {
+            //Case where prompts are off and no prompt is given in argument.
+            itemBody = "";
         }
         else
             itemBody = bodyText;
@@ -394,6 +406,11 @@ void TodoController::checkDeadLines()
         toPrint.at(iter)->print();
         std::cout << "---------------------------------------" << std::endl;
     }
+}
+
+void TodoController::togglePrompts()
+{
+    this->prompts = !this->prompts;
 }
 
 ///PRIVATE

@@ -35,6 +35,7 @@ class TodoController
         std::string showList(std::string);
 
         void checkDeadLines();
+        void togglePrompts();
     
     private:
         //Private methods
@@ -55,6 +56,9 @@ class TodoController
         
         //Lists are stored on heap, make sure to destruct that memory.
         std::vector<priorityQueueTodo *> lists;
+
+        //Toggle whether to prompt the user for input.
+        bool prompts;
 
 
 };
