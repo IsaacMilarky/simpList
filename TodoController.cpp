@@ -368,11 +368,13 @@ std::string TodoController::showList(std::string listName)
 }
 
 //O(n^2) fix in the future.
-void TodoController::checkDeadLines()
+std::string TodoController::checkDeadLines()
 {
     boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
     //Vector to hold data to print.
     std::vector<ListItem *> toPrint;
+    //String to hold data to print
+    std::string printString = "";
     //Check deadlines in all lists.
     //Notify if deadline is less than five minutes away.
     for(unsigned int iter = 0; iter < lists.size(); ++iter)
@@ -390,7 +392,7 @@ void TodoController::checkDeadLines()
             {
                 //Time elapsed
                 boost::posix_time::time_duration diff = stopDate - now;
-                if(diff.total_seconds() <= 120)
+                if(std::abs(diff.total_seconds()) <= 120)
                 {
                     toPrint.push_back(itemRef);
                 }
@@ -403,9 +405,11 @@ void TodoController::checkDeadLines()
     
     for(unsigned int iter = 0; iter < toPrint.size(); iter++)
     {
-        toPrint.at(iter)->print();
+        printString += toPrint.at(iter)->print();
         std::cout << "---------------------------------------" << std::endl;
     }
+
+    return printString;
 }
 
 void TodoController::togglePrompts()

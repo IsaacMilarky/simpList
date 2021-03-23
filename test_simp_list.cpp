@@ -196,3 +196,29 @@ BOOST_AUTO_TEST_CASE(test_heavy_wrapper_load)
 
     std::cout << "-----------------------TEST END------------------\n";
 }
+
+//Test scheduling method.
+BOOST_AUTO_TEST_CASE(test_check_dead_lines)
+{
+    std::cout << "-----------------------STARTING TEST------------------\n";
+    TodoController controller = TodoController();
+
+    //Create list to pump full of deadlines
+    controller.addList("deadLines");
+    //Example items that SHOULD NOT get output
+    controller.addToList("deadLines","NotDue",boost::gregorian::from_string("2024/1/1"),"3:00PM","This is not due");
+
+    controller.addToList("deadLines","NotDueToo",boost::gregorian::from_string("2020/1/1"),"3:00PM","This is not due");
+
+    BOOST_TEST(controller.checkDeadLines().find("NotDue") == std::string::npos);
+
+    //Example items that SHOULD get output.
+    boost::posix_time::ptime local = boost::posix_time::second_clock::local_time();
+    std::string hourString = local.time_of_day().hours() + ":" + (local.time_of_day().minutes() + 2);
+    controller.addToList("deadLines","NotDueToo",local.date(),hourString,"This is not due");
+
+    BOOST_TEST(controller.checkDeadLines().find("NotDue") != std::string::npos);
+
+    //Add some far away dates that should not illicit a response.
+    std::cout << "-----------------------TEST END------------------\n";
+}

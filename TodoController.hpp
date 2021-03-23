@@ -34,7 +34,7 @@ class TodoController
         //Returns string for tests.
         std::string showList(std::string);
 
-        void checkDeadLines();
+        std::string checkDeadLines();
         void togglePrompts();
     
     private:
