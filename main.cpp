@@ -17,7 +17,7 @@ int main(int argc, char * argv[])
     //Addition only really happens when optionals are used like -m
     char ** argumentPointer = argv;
     //Print Version number
-    std::cout << argumentPointer[0] << " Version " << SimpList_VERSION_MAJOR << "."
+    std::cout << argumentPointer[0] << " Alpha Version " << SimpList_VERSION_MAJOR << "."
         << SimpList_VERSION_MINOR << std::endl;
     
     TodoController mainController = TodoController();
@@ -31,7 +31,8 @@ int main(int argc, char * argv[])
     Operations:
         create - create list
         add - add to List
-        
+    
+    TODO: Make the install script actually save .list files in the right place and add a new script that calls schedule update in chron
         
     */
 
@@ -57,7 +58,7 @@ int main(int argc, char * argv[])
             throw "Too many arguments for cohearant list creation!"; 
         mainController.addList(std::string(argumentPointer[2]));
     }
-    else if(operation == "add")
+    else if(operation == "add" || operation == "edit")
     {
         /*
             For adding to lists:
@@ -104,7 +105,10 @@ int main(int argc, char * argv[])
         else
             timeValue = "";
         
-        mainController.addToList(listName,itemName,itemDeadline,timeValue,itemBody);
+        if(operation == "add")
+            mainController.addToList(listName,itemName,itemDeadline,timeValue,itemBody);
+        else
+            mainController.editList(listName,itemName,itemDeadline,timeValue,itemBody);
 
     }
     else if(operation == "delete")
@@ -115,9 +119,7 @@ int main(int argc, char * argv[])
     }
     else if(operation == "update")
     {
-        if(argumentPointer[3] != NULL)
-            throw "Too many arguments for update call!";
-        
+
         mainController.checkDeadLines();
     }
     else if(operation == "show")

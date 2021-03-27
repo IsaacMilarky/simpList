@@ -353,7 +353,7 @@ std::string TodoController::showList(std::string listName)
     //Check for empty
     std::string toPrint = "";
     priorityQueueTodo * someList = this->getList(listName);
-
+    std::cout << "Showing list " << someList->getName() << ":\n";
     toPrint += someList->getName() + '\n';
 
     if(someList != nullptr)
@@ -373,6 +373,8 @@ std::string TodoController::checkDeadLines()
     boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
     //Vector to hold data to print.
     std::vector<ListItem *> toPrint;
+    //Vector to hold data thats around a day away
+    std::vector<ListItem *> lateToPrint;
     //String to hold data to print
     std::string printString = "";
     //Check deadlines in all lists.
@@ -396,16 +398,32 @@ std::string TodoController::checkDeadLines()
                 {
                     toPrint.push_back(itemRef);
                 }
+                else if(std::abs(diff.total_seconds()) <= 86400)
+                {
+                    //Else if less than a day away
+                    lateToPrint.push_back(itemRef);
+                }
             }
         }
     }
 
     if(!toPrint.empty())
         std::cout << toPrint.size() << " events are due in the near future!\n" << std::endl;
+    else
+        std::cout << "No events are due in the near future!\n" << std::endl;
     
     for(unsigned int iter = 0; iter < toPrint.size(); iter++)
     {
         printString += toPrint.at(iter)->print();
+        std::cout << "---------------------------------------" << std::endl;
+    }
+
+    if(!lateToPrint.empty())
+        std::cout << lateToPrint.size() << " events due less than a day from now!\n" << std::endl;
+    
+    for(unsigned int iter = 0; iter < lateToPrint.size(); iter++)
+    {
+        printString += lateToPrint.at(iter)->print();
         std::cout << "---------------------------------------" << std::endl;
     }
 

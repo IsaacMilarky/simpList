@@ -258,7 +258,6 @@ void priorityQueueTodo::deleteItem(std::string itemName)
 
 //Private
 //TODO: this is bubble sort but should be something better.
-// Currently does not work.
 void priorityQueueTodo::sort()
 {
 	//Decending order.

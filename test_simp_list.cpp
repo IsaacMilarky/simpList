@@ -202,6 +202,20 @@ BOOST_AUTO_TEST_CASE(test_check_dead_lines)
 {
     std::cout << "-----------------------STARTING TEST------------------\n";
     TodoController controller = TodoController();
+    //Example items that SHOULD get output.
+    boost::posix_time::ptime local = boost::posix_time::second_clock::local_time();
+
+    int hours = local.time_of_day().hours();
+    int minutes = (local.time_of_day().minutes() + 2);
+
+    //std::string hourString = local.time_of_day().hours() + ":" + (local.time_of_day().minutes() + 2);
+    /*
+    std::cout << "HOURS:" << hours;
+    std::cout << ":";
+    std::cout << "MINUTES:" << minutes << std::endl;
+    */
+    std::string hourString = std::to_string(hours) + ":" + std::to_string(minutes);
+
 
     //Create list to pump full of deadlines
     controller.addList("deadLines");
@@ -212,9 +226,7 @@ BOOST_AUTO_TEST_CASE(test_check_dead_lines)
 
     BOOST_TEST(controller.checkDeadLines().find("NotDue") == std::string::npos);
 
-    //Example items that SHOULD get output.
-    boost::posix_time::ptime local = boost::posix_time::second_clock::local_time();
-    std::string hourString = local.time_of_day().hours() + ":" + (local.time_of_day().minutes() + 2);
+
     controller.addToList("deadLines","NotDueToo",local.date(),hourString,"This is not due");
 
     BOOST_TEST(controller.checkDeadLines().find("NotDue") != std::string::npos);
