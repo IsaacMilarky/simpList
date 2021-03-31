@@ -10,6 +10,8 @@
 
 //Where to save listItems
 const std::string LISTITEM_STORE = "listitems.list";
+static std::string listStringLocation = std::string(getenv("HOME")) + std::string("/.simplist");
+
 
 //Utility function because std::algorithm shit the bed earlier.
 bool contains(std::vector<std::string>* collection, std::string searchTerm)
@@ -34,7 +36,7 @@ BOOST_AUTO_TEST_CASE(test_list_create)
     wrap.addItem(&g);
     std::string listName = "readWriteExample";
     std::string fileName = listName + ".list";
-    wrap.writeToFile(fileName);
+    wrap.writeToFile(listStringLocation + "/" + fileName);
 
     TodoController controller = TodoController();
     std::vector<std::string> controlLists = controller.getLists();

@@ -1,6 +1,8 @@
 #include "TodoController.hpp"
 #include <cmath>
 
+static std::string listStringLocation = std::string(getenv("HOME")) + std::string("/.simplist");
+
 bool hasEnding(std::string const &fullString, std::string const &ending)
 {
     if(fullString.length() >= ending.length())
@@ -20,7 +22,12 @@ TodoController::TodoController()
     //Load all .list Items from file.
     std::vector<std::string> listFiles;
 
-    boost::filesystem::path p(".");
+    //Lists are user specific 
+    boost::filesystem::path p(listStringLocation);
+    if(!boost::filesystem::exists(p))
+        boost::filesystem::create_directory(p);
+
+    //std::cout << listStringLocation << std::endl;
 
     boost::filesystem::directory_iterator end_itr;
 
@@ -31,8 +38,8 @@ TodoController::TodoController()
         //If it's not a directory, list it. remove this check to also list dirs
         if(boost::filesystem::is_regular_file(itr->path()) && hasEnding(current_file,".list"))
         {
-            std::size_t iPos = current_file.find("/");
-            //std::size_t fPos = current_file.find(".list");
+            std::size_t iPos = current_file.find_last_of("/");
+            std::size_t fPos = current_file.find(".list");
 
             //std::cout << current_file.substr(iPos + 1,fPos - 1) << std::endl;
             listFiles.push_back(current_file.substr(iPos + 1));
@@ -44,8 +51,9 @@ TodoController::TodoController()
     {
         //Load from file, This is tricky as hell beware.
         ListItemLoadWrapper loadFromDrive = ListItemLoadWrapper();
-        //std::cout << listFiles.at(iter) << std::endl;
-        loadFromDrive.loadFromFile(listFiles.at(iter));
+        //std:: cout << "Loading.. ";
+        //std::cout << listStringLocation + "/" + listFiles.at(iter) << std::endl;
+        loadFromDrive.loadFromFile(listStringLocation + "/" + listFiles.at(iter));
 
         //Load Each item into a PQ. strip the file extension.
         std::size_t iPos = listFiles.at(iter).find(".");
@@ -81,7 +89,8 @@ TodoController::~TodoController()
             head = lists.at(iter)->popHead();
         }
 
-        saveToDrive.writeToFile(lists.at(iter)->getName() + ".list");
+        //std::cout << listStringLocation + "/" + lists.at(iter)->getName() + ".list" << std::endl;
+        saveToDrive.writeToFile(listStringLocation + "/" + lists.at(iter)->getName() + ".list");
         //delete data
         delete lists.at(iter);
     }
@@ -304,7 +313,7 @@ priorityQueueTodo * TodoController::getList(std::string listName)
 void TodoController::deleteList(std::string listName)
 {
 
-    boost::filesystem::path p(".");
+    boost::filesystem::path p(listStringLocation);
 
     boost::filesystem::directory_iterator end_itr;
 
